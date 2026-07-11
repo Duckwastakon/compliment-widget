@@ -6,11 +6,13 @@
  */
 
 import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { StatusBar, StyleSheet, useColorScheme} from 'react-native';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+
+import {Text, View} from 'react-native';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -36,10 +38,19 @@ function AppContent() {
   );
 }
 
+const HelloWorldApp = () => {
+  return (
+    <View style={styles.container}>
+    <Text>print hello world</Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
+    justifyContent: 'center',
+    alignItems: 'center',},
 });
 
-export default App;
+export default HelloWorldApp;
