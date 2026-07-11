@@ -16,7 +16,7 @@ import { Text, View, ScrollView, TextInput } from 'react-native';
 import { colors, globalStyles } from './styles/global';
 import { useEffect, useState } from 'react';
 
-import fileReader, { readFile } from 'react-native-fs';
+import fileReader from 'react-native-fs';
 const listPath = fileReader.DocumentDirectoryPath + '/lists';
 
 console.log(fileReader.DocumentDirectoryPath);
