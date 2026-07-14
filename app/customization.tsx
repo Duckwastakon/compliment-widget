@@ -1,6 +1,6 @@
 import { Directory, File, Paths } from "expo-file-system";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { FlatList, Pressable, Text, TextInput, View } from "react-native";
 
 import { colors, globalStyles } from "@/globals/Global";
 
@@ -75,30 +75,49 @@ const Customization = () => {
     loadFiles();
   }, []);
 
+  type fileMusts = { fileName: string };
+  const FileText = ({ fileName }: fileMusts) => (
+    <View style={globalStyles.inLineText}>
+      <Pressable
+        onPress={() => {
+          openList(fileName);
+        }}
+      >
+        <Text style={globalStyles.text}>{fileName}</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          deleteFile(fileName);
+        }}
+      >
+        <Text style={globalStyles.deleteText}>Delete list</Text>
+      </Pressable>
+    </View>
+  );
+
+  type stringMusts = { comp: string };
+  const StringText = ({ comp }: stringMusts) => (
+    <View style={globalStyles.inLineText}>
+      <Text style={globalStyles.text}>{comp}</Text>
+      <Pressable
+        onPress={() => {
+          updateComplimentList(compliments.filter((c) => c !== comp));
+        }}
+      >
+        <Text style={globalStyles.deleteText}>Delete</Text>
+      </Pressable>
+    </View>
+  );
+
   return (
     <View style={globalStyles.container}>
       {!viewing ? (
         <>
-          <ScrollView style={globalStyles.scroll}>
-            {listFiles.map((list, index) => (
-              <View key={index} style={globalStyles.inLineText}>
-                <Pressable
-                  onPress={() => {
-                    openList(list.name);
-                  }}
-                >
-                  <Text style={globalStyles.text}>{list.name}</Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    deleteFile(list.name);
-                  }}
-                >
-                  <Text style={globalStyles.deleteText}>Delete list</Text>
-                </Pressable>
-              </View>
-            ))}
-          </ScrollView>
+          <FlatList
+            style={globalStyles.scroll}
+            data={listFiles}
+            renderItem={({ item }) => <FileText fileName={item.name} />}
+          />
           <TextInput
             style={globalStyles.text}
             placeholder="Enter new file name"
@@ -128,20 +147,12 @@ const Customization = () => {
           >
             <Text style={globalStyles.deleteText}>Save compliment table</Text>
           </Pressable>
-          <ScrollView style={globalStyles.scroll}>
-            {compliments.map((comp, index) => (
-              <View key={index} style={globalStyles.inLineText}>
-                <Text style={globalStyles.text}>{comp}</Text>
-                <Pressable
-                  onPress={() => {
-                    updateComplimentList(compliments.filter((c) => c !== comp));
-                  }}
-                >
-                  <Text style={globalStyles.deleteText}>Delete</Text>
-                </Pressable>
-              </View>
-            ))}
-          </ScrollView>
+
+          <FlatList
+            style={globalStyles.scroll}
+            data={compliments}
+            renderItem={({ item }) => <StringText comp={item} />}
+          />
           <TextInput
             style={globalStyles.text}
             placeholder="Enter compliment"

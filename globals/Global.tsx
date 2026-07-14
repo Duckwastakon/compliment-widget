@@ -6,7 +6,7 @@ export const colors = {
   textColor: "#ffffff",
   clickColor: "#748cb4",
   scrollColor: "#3de285",
-  borderColor: "#ea41c3",
+  borderColor: "#3c3c3c",
   deleteTextColor: "#e04537",
 };
 
@@ -35,7 +35,7 @@ export const globalStyles = StyleSheet.create({
   },
 
   scroll: {
-    backgroundColor: colors.scrollColor,
+    backgroundColor: colors.darkBackground,
     margin: 16,
     borderWidth: 4,
     borderRadius: 4,
