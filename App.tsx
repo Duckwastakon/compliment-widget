@@ -66,10 +66,10 @@ const App = () => {
     await fileReader.writeFile(listPath + fileName, 'Hey pretty', 'utf8');
   };
 
-  const saveFile = async () => {
+  const saveFile = async (fileName: string) => {
   fileReader.mkdir(listPath);
 
-  let path = listPath + complimentFile
+  let path = listPath + fileName
   await fileReader.writeFile(path, JSON.stringify(compliments), 'utf8');
 }
 
@@ -77,15 +77,15 @@ const App = () => {
     updateComplimentFile("/" + fileName);
     updateViewing(true);
 
-    let path = listPath + complimentFile
+    let path = listPath + "/" + fileName
     const listContent = await fileReader.readFile(path, "utf8");
     updateComplimentList(JSON.parse(listContent))
   }
 
-  const exitComplimentsList = async () => {
+  const exitComplimentsList = (fileName: string) => {
     updateViewing(false);
 
-    saveFile()
+    saveFile(fileName)
   }
 
   useEffect(() => {
@@ -134,7 +134,7 @@ const App = () => {
       ) : (
         <>
         <Text style={globalStyles.text}>{complimentFile}</Text>
-          <Pressable onPress={exitComplimentsList}>
+          <Pressable onPress={() => {exitComplimentsList(complimentFile)}}>
             <Text style={globalStyles.deleteText}>Save compliment table</Text>
           </Pressable>
           <ScrollView style={globalStyles.scroll}>
