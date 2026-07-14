@@ -61,32 +61,40 @@ const App = () => {
     updateComplimentFiles(result);
   };
 
+  const saveFile = async (fileName: string) => {
+    fileReader.mkdir(listPath);
+
+    let path = listPath + fileName;
+    await fileReader.writeFile(path, JSON.stringify(compliments), 'utf8');
+  };
+
   const createNewFile = async (fileName: string) => {
     fileReader.mkdir(listPath);
     await fileReader.writeFile(listPath + fileName, 'Hey pretty', 'utf8');
   };
 
-  const saveFile = async (fileName: string) => {
-  fileReader.mkdir(listPath);
+  const deleteFile = async (filePath: string) => {
+    if (await fileReader.exists(filePath)) {
+      await fileReader.unlink(filePath)
 
-  let path = listPath + fileName
-  await fileReader.writeFile(path, JSON.stringify(compliments), 'utf8');
-}
+      loadFiles()
+    }
+  }
 
   const openList = async (fileName: string) => {
-    updateComplimentFile("/" + fileName);
+    updateComplimentFile('/' + fileName);
     updateViewing(true);
 
-    let path = listPath + "/" + fileName
-    const listContent = await fileReader.readFile(path, "utf8");
-    updateComplimentList(JSON.parse(listContent))
-  }
+    let path = listPath + '/' + fileName;
+    const listContent = await fileReader.readFile(path, 'utf8');
+    updateComplimentList(JSON.parse(listContent));
+  };
 
   const exitComplimentsList = (fileName: string) => {
     updateViewing(false);
 
-    saveFile(fileName)
-  }
+    saveFile(fileName);
+  };
 
   useEffect(() => {
     loadFiles();
@@ -106,7 +114,9 @@ const App = () => {
                 >
                   <Text style={globalStyles.text}>{list.name}</Text>
                 </Pressable>
-                <Pressable>
+                <Pressable onPress={() => {
+                  deleteFile(list.path)
+                }}>
                   <Text style={globalStyles.deleteText}>Delete list</Text>
                 </Pressable>
               </View>
@@ -133,8 +143,12 @@ const App = () => {
         </>
       ) : (
         <>
-        <Text style={globalStyles.text}>{complimentFile}</Text>
-          <Pressable onPress={() => {exitComplimentsList(complimentFile)}}>
+          <Text style={globalStyles.text}>{complimentFile}</Text>
+          <Pressable
+            onPress={() => {
+              exitComplimentsList(complimentFile);
+            }}
+          >
             <Text style={globalStyles.deleteText}>Save compliment table</Text>
           </Pressable>
           <ScrollView style={globalStyles.scroll}>
