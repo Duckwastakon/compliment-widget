@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const colors = {
   background: "#222222",
+  darkBackground: "#353535",
   textColor: "#ffffff",
   clickColor: "#748cb4",
   scrollColor: "#3de285",
@@ -51,5 +52,22 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     gap: 10,
+  },
+
+  complimentContainer: {
+    margin: 8,
+    padding: 10,
+    backgroundColor: colors.darkBackground,
+    width: "80%",
+    maxHeight: "25%",
+    minHeight: "10%",
+    borderRadius: 8,
+    justifyContent: "center",
+  },
+
+  complimentText: {
+    fontSize: 24,
+    color: colors.textColor,
+    textAlign: "left",
   },
 });

@@ -58,7 +58,6 @@ const Customization = () => {
 
   const openList = async (fileName: string) => {
     const file = new File(listDirectory, fileName);
-    const content = file.textSync();
     updatecurrentFile(fileName);
     updateViewing(true);
 
