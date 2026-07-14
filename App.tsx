@@ -45,18 +45,6 @@ function AppContent() {
   );
 }
 
-type People = {
-  name: string;
-};
-
-const GreetUser = (user: People) => {
-  return (
-    <View style={globalStyles.container}>
-      <Text>Hello {user.name}!</Text>
-    </View>
-  );
-};
-
 const App = () => {
   const [compliment, updateCompliment] = useState('');
   const [compliments, updateComplimentList] = useState<string[]>([]);
@@ -78,24 +66,26 @@ const App = () => {
     await fileReader.writeFile(listPath + fileName, 'Hey pretty', 'utf8');
   };
 
+  const saveFile = async () => {
+  fileReader.mkdir(listPath);
+
+  let path = listPath + complimentFile
+  await fileReader.writeFile(path, JSON.stringify(compliments), 'utf8');
+}
+
   const openList = async (fileName: string) => {
     updateComplimentFile("/" + fileName);
     updateViewing(true);
 
-    const listContent = await fileReader.readFile(listPath + complimentFile, "utf8");
-    const listCompliments = listContent.split("\n");
-
-    let comps: string[] = []
-    listCompliments.map((comp) => {
-      comps.push(comp)
-    })
-
-    updateComplimentList(comps)
+    let path = listPath + complimentFile
+    const listContent = await fileReader.readFile(path, "utf8");
+    updateComplimentList(JSON.parse(listContent))
   }
 
   const exitComplimentsList = async () => {
     updateViewing(false);
 
+    saveFile()
   }
 
   useEffect(() => {
@@ -132,7 +122,7 @@ const App = () => {
           <Pressable
             onPress={() => {
               if (complimentFile !== '') {
-                createNewFile('/' + complimentFile + '.txt');
+                createNewFile('/' + complimentFile + '.json');
                 loadFiles();
                 updateComplimentFile('');
               }
@@ -143,6 +133,7 @@ const App = () => {
         </>
       ) : (
         <>
+        <Text style={globalStyles.text}>{complimentFile}</Text>
           <Pressable onPress={exitComplimentsList}>
             <Text style={globalStyles.deleteText}>Save compliment table</Text>
           </Pressable>
@@ -182,15 +173,5 @@ const App = () => {
     </View>
   );
 };
-
-function saveToFile(arr: Array<string>, fileName: string) {
-  fileReader.mkdir(listPath);
-  fileReader.writeFile(listPath + fileName, '', 'utf8');
-  arr.map(comp => {
-    fileReader.appendFile(listPath + fileName, comp);
-  });
-
-  fileReader.readFile(listPath + fileName);
-}
 
 export default App;
