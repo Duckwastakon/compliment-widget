@@ -45,7 +45,7 @@ function AppContent() {
   );
 }
 
-const App = () => {
+export default function App() {
   const [compliment, updateCompliment] = useState('');
   const [compliments, updateComplimentList] = useState<string[]>([]);
   const [complimentFile, updateComplimentFile] = useState('');
@@ -54,9 +54,9 @@ const App = () => {
     fileReader.ReadDirItem[]
   >([]);
 
-  fileReader.mkdir(listPath);
-
   const loadFiles = async () => {
+    await fileReader.mkdir(listPath);
+
     const result = await fileReader.readDir(listPath);
     updateComplimentFiles(result);
   };
@@ -69,17 +69,30 @@ const App = () => {
   };
 
   const createNewFile = async (fileName: string) => {
-    fileReader.mkdir(listPath);
-    await fileReader.writeFile(listPath + fileName, 'Hey pretty', 'utf8');
+    let res = await fileReader.exists(listPath + fileName);
+    if (!res) {
+      const def = [
+        'you look good',
+        'you have a good mindset',
+        'keep up the good work',
+      ];
+      await fileReader.writeFile(
+        listPath + fileName,
+        JSON.stringify(def),
+        'utf8',
+      );
+
+      loadFiles();
+    }
   };
 
   const deleteFile = async (filePath: string) => {
     if (await fileReader.exists(filePath)) {
-      await fileReader.unlink(filePath)
+      await fileReader.unlink(filePath);
 
-      loadFiles()
+      loadFiles();
     }
-  }
+  };
 
   const openList = async (fileName: string) => {
     updateComplimentFile('/' + fileName);
@@ -114,9 +127,11 @@ const App = () => {
                 >
                   <Text style={globalStyles.text}>{list.name}</Text>
                 </Pressable>
-                <Pressable onPress={() => {
-                  deleteFile(list.path)
-                }}>
+                <Pressable
+                  onPress={() => {
+                    deleteFile(list.path);
+                  }}
+                >
                   <Text style={globalStyles.deleteText}>Delete list</Text>
                 </Pressable>
               </View>
@@ -138,7 +153,7 @@ const App = () => {
               }
             }}
           >
-            <Text style={globalStyles.text}>Create new compliment list</Text>
+            <Text style={globalStyles.text}>Create new list</Text>
           </Pressable>
         </>
       ) : (
@@ -187,5 +202,3 @@ const App = () => {
     </View>
   );
 };
-
-export default App;
