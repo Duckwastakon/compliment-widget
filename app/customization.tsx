@@ -18,6 +18,8 @@ import {
   saveFile,
 } from "@/globals/fileController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import sqliteStorage from "expo-sqlite/kv-store";
+export const ACTIVE_FILE_KEY = "ACTIVEFILES";
 
 const Customization = () => {
   const listDir = new Directory(Paths.document, "lists");
@@ -57,6 +59,16 @@ const Customization = () => {
   type fileMusts = { fileName: string };
   const FileText = ({ fileName }: fileMusts) => {
     const [active, changeValue] = useState(false);
+
+    const checkSwitch = async () => {
+      const currentActive = await AsyncStorage.getItem("activeFiles");
+      if (currentActive !== null) {
+        if (currentActive.includes(fileName)) {
+          changeValue(true);
+        }
+      }
+    };
+
     const toggleSwitch = async () => {
       changeValue((previousState) => !previousState);
 
@@ -71,8 +83,15 @@ const Customization = () => {
       else newList = newList.filter((val) => val !== fileName);
 
       await AsyncStorage.setItem("activeFiles", JSON.stringify(newList));
+      sqliteStorage.setItemAsync(ACTIVE_FILE_KEY, JSON.stringify(newList));
       console.log(newList);
     };
+
+    useEffect(() => {
+      console.log("Runs only once");
+
+      checkSwitch();
+    }, []);
 
     return (
       <View style={globalStyles.inLineText}>

@@ -1,11 +1,13 @@
 import { globalStyles } from "@/globals/Global";
 import { Pressable, Text, View } from "react-native";
 
-import { HelloWidget } from "@/widgets/androidWidget";
+import {
+  getNewCompliment,
+  setNewTime,
+  timeToString,
+} from "@/globals/dataController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Directory, File, Paths } from "expo-file-system";
 import { useEffect, useState } from "react";
-import { WidgetPreview } from "react-native-android-widget";
 
 export default function Index() {
   const [generatedString, updateString] = useState("");
@@ -14,40 +16,7 @@ export default function Index() {
   const [hours, updateHours] = useState("xx");
 
   const generateString = async () => {
-    const chosenFiles = await AsyncStorage.getItem("activeFiles");
-
-    let chosenFile;
-
-    const dir = new Directory(Paths.document, "lists");
-    dir.create({ idempotent: true });
-
-    if (chosenFiles === null) {
-      chosenFile = "Main.json";
-    } else {
-      const allFiles = JSON.parse(chosenFiles);
-      if (allFiles.length === 0) {
-        chosenFile = "Main.json";
-      } else {
-        chosenFile = allFiles[Math.floor(Math.random() * allFiles.length)];
-      }
-    }
-
-    const file = new File(dir, chosenFile);
-
-    const content = JSON.parse(file.textSync());
-    const lastString = await AsyncStorage.getItem("lastString");
-    let newString = content[Math.floor(Math.random() * content.length)];
-    while (newString === lastString && content.length > 1) {
-      newString = content[Math.floor(Math.random() * content.length)];
-    }
-
-    await AsyncStorage.setItem("lastString", newString);
-    await AsyncStorage.setItem(
-      "nextUpdateTime",
-      (Date.now() + 60 * 1000 * 60 * 24).toString(),
-    );
-
-    updateString(newString);
+    updateString(await getNewCompliment());
   };
 
   const checkPassedTime = async () => {
@@ -60,18 +29,12 @@ export default function Index() {
     const savedTime = await AsyncStorage.getItem("nextUpdateTime");
 
     if (!savedTime) {
-      await AsyncStorage.setItem(
-        "nextUpdateTime",
-        (Date.now() + 60 * 1000 * 60 * 24).toString(),
-      );
+      setNewTime();
       generateString();
     } else {
       if (Date.now() > Number(savedTime)) {
         console.log("timed compliment");
-        await AsyncStorage.setItem(
-          "nextUpdateTime",
-          (Date.now() + 60 * 1000 * 60 * 24).toString(),
-        );
+        setNewTime();
         generateString();
       }
     }
@@ -82,21 +45,12 @@ export default function Index() {
     let timeLeft = Number(savedTime) - Date.now();
 
     if (timeLeft < 0) {
-      await AsyncStorage.setItem(
-        "nextUpdateTime",
-        (Date.now() + 60 * 1000 * 60 * 24).toString(),
-      );
+      setNewTime();
       generateString();
       return;
     }
 
-    let hours = Math.floor(timeLeft / 1000 / 60 / 60);
-    let minutes = Math.floor(timeLeft / 1000 / 60 - hours * 60);
-    let seconds = Math.floor(timeLeft / 1000 - minutes * 60 - hours * 60 * 60);
-
-    let hourString = "0" + hours.toString();
-    let minuteString = "0" + minutes.toString();
-    let secondString = "0" + seconds.toString();
+    const { hourString, minuteString, secondString } = timeToString(timeLeft);
     updateHours(hourString.substring(hourString.length - 2, hourString.length));
     updateMinutes(
       minuteString.substring(minuteString.length - 2, minuteString.length),
@@ -104,29 +58,22 @@ export default function Index() {
     updateSeconds(
       secondString.substring(secondString.length - 2, secondString.length),
     );
-
-    //console.log(
-    //  hours.toString() + ":" + minutes.toString() + ":" + seconds.toString(),
-    //);
   };
 
   useEffect(() => {
     checkPassedTime();
 
+    updateTimer();
+
     const interval = setInterval(() => {
       updateTimer();
-    }, 1000);
+    }, 5000);
 
     return () => clearInterval(interval);
   });
 
   return (
     <View style={globalStyles.container}>
-      <WidgetPreview
-        renderWidget={() => HelloWidget()}
-        width={320}
-        height={180}
-      />
       <Text style={globalStyles.title}>Main page</Text>
       <View style={globalStyles.complimentContainer}>
         <Text style={globalStyles.complimentText}>{generatedString}</Text>

@@ -57,15 +57,15 @@
             },
             {
               "name": "dispWidget",
-              "label": "My Hello Widget",
+              "label": "disp",
               "minWidth": "320dp",
               "minHeight": "120dp",
               "targetCellWidth": 5,
               "targetCellHeight": 2,
-              "description": "This is my first widget",
+              "description": "Yoooo",
               "previewImage": "./assets/images/icon.png",
               "updatePeriodMillis": 1800000,
-              "widgetFeatures": "reconfigurable",
+              //"widgetFeatures": "reconfigurable",
               "resizeMode": "horizontal|vertical"
             }
           ]

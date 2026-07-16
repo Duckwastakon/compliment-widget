@@ -1,4 +1,9 @@
 "use no memo";
+import {
+  getNewCompliment,
+  setNewTime,
+  timeToString,
+} from "@/globals/dataController";
 import React from "react";
 import { ColorProp, FlexWidget, TextWidget } from "react-native-android-widget";
 
@@ -33,19 +38,36 @@ interface stringWidgetProperites {
   timeLeft: number;
 }
 
+const bgColors: Record<string, ColorProp> = {
+  light: "#ffffff",
+  dark: "#000000",
+};
+const textColors: Record<string, ColorProp> = {
+  light: "#000000",
+  dark: "#ffffff",
+};
+
 export function StringWidget({
   currentString,
   theme,
   timeLeft,
 }: stringWidgetProperites) {
-  const bgColors: Record<string, ColorProp> = {
-    light: "#ffffff",
-    dark: "#000000",
-  };
-  const textColors: Record<string, ColorProp> = {
-    light: "#000000",
-    dark: "#ffffff",
-  };
+  let timeString: string;
+  if (timeLeft < Date.now()) {
+    currentString = getNewCompliment();
+    setNewTime();
+    timeString = "23:59:99";
+  } else {
+    const { hourString, minuteString, secondString } = timeToString(
+      timeLeft - Date.now(),
+    );
+    timeString =
+      hourString.substring(minuteString.length - 2, minuteString.length) +
+      ":" +
+      minuteString.substring(minuteString.length - 2, minuteString.length) +
+      ":" +
+      secondString.substring(minuteString.length - 2, minuteString.length);
+  }
 
   const textColor = textColors[theme] || "#000000";
   const bgColor = bgColors[theme] || "#000000";
@@ -60,21 +82,23 @@ export function StringWidget({
         padding: 12,
         flexDirection: "column",
       }}
-      clickAction="OPEN_APP"
+      clickAction="MY_ACTION"
+      clickActionData={{ theme: theme, timeLeft: timeLeft }}
+      accessibilityLabel="Change compliment"
     >
       <TextWidget
         text={currentString}
         style={{
-          fontSize: 48,
+          fontSize: 24,
           color: textColor,
           fontWeight: "bold",
           marginBottom: 6,
         }}
       />
       <TextWidget
-        text={timeLeft.toString()}
+        text={timeString}
         style={{
-          fontSize: 16,
+          fontSize: 12,
           color: textColor,
           fontWeight: "200",
         }}
