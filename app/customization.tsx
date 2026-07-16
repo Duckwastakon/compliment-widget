@@ -1,12 +1,27 @@
 import { Directory, File, Paths } from "expo-file-system";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, Text, TextInput, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 import { colors, globalStyles } from "@/globals/Global";
+import {
+  createNewFile,
+  deleteFile,
+  getAllFiles,
+  readFile,
+  saveFile,
+} from "@/globals/fileController";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Customization = () => {
-  const listDirectory = new Directory(Paths.document, "lists");
-  listDirectory.create({ idempotent: true });
+  const listDir = new Directory(Paths.document, "lists");
+  listDir.create({ idempotent: true });
 
   const [compliment, updateCompliment] = useState("");
   const [compliments, updateComplimentList] = useState<string[]>([]);
@@ -15,60 +30,24 @@ const Customization = () => {
   const [listFiles, updateListFiles] = useState<(Directory | File)[]>([]);
 
   const loadFiles = async () => {
-    try {
-      const files = listDirectory.list();
-
+    const files = getAllFiles(listDir);
+    if (files !== undefined) {
       updateListFiles(files);
-    } catch (error) {
-      console.error(error);
     }
   };
 
-  const saveFile = async (fileName: string) => {
-    try {
-      const file = new File(listDirectory, fileName);
-      file.write(JSON.stringify(compliments));
-      loadFiles();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const createNewFile = async (fileName: string) => {
-    try {
-      const file = new File(listDirectory, fileName + ".json");
-      if (file.exists) return;
-      file.create();
-      file.write(JSON.stringify(["congrats on making a new list"]));
-      loadFiles();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const deleteFile = async (fileName: string) => {
-    try {
-      const file = new File(listDirectory, fileName);
-      file.delete();
-      loadFiles();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const openList = async (fileName: string) => {
-    const file = new File(listDirectory, fileName);
+  const openFile = async (fileName: string) => {
     updatecurrentFile(fileName);
     updateViewing(true);
 
-    updateComplimentList(JSON.parse(file.textSync()));
+    updateComplimentList(await readFile(listDir, fileName));
   };
 
-  const exitComplimentsList = (fileName: string) => {
+  const exitFile = (fileName: string) => {
     updatecurrentFile("");
     updateViewing(false);
 
-    saveFile(fileName);
+    saveFile(listDir, fileName, JSON.stringify(compliments));
   };
 
   useEffect(() => {
@@ -76,36 +55,68 @@ const Customization = () => {
   }, []);
 
   type fileMusts = { fileName: string };
-  const FileText = ({ fileName }: fileMusts) => (
-    <View style={globalStyles.inLineText}>
-      <Pressable
-        onPress={() => {
-          openList(fileName);
-        }}
-      >
-        <Text style={globalStyles.text}>{fileName}</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          deleteFile(fileName);
-        }}
-      >
-        <Text style={globalStyles.deleteText}>Delete list</Text>
-      </Pressable>
-    </View>
-  );
+  const FileText = ({ fileName }: fileMusts) => {
+    const [active, changeValue] = useState(false);
+    const toggleSwitch = async () => {
+      changeValue((previousState) => !previousState);
+
+      let currentList = await AsyncStorage.getItem("activeFiles");
+      let newList: string[] = [];
+
+      if (currentList !== null) {
+        newList = JSON.parse(currentList);
+      }
+
+      if (!active) newList.push(fileName);
+      else newList = newList.filter((val) => val !== fileName);
+
+      await AsyncStorage.setItem("activeFiles", JSON.stringify(newList));
+      console.log(newList);
+    };
+
+    return (
+      <View style={globalStyles.inLineText}>
+        <View style={globalStyles.fileNameContainer}>
+          <Pressable
+            onPress={() => {
+              openFile(fileName);
+            }}
+          >
+            <Text style={globalStyles.text}>{fileName}</Text>
+          </Pressable>
+        </View>
+        <View style={globalStyles.activeSlider}>
+          <Switch onChange={toggleSwitch} value={active} />
+        </View>
+        <View style={globalStyles.deleteFileTextContainer}>
+          <Pressable
+            onPress={() => {
+              deleteFile(listDir, fileName);
+              loadFiles();
+            }}
+          >
+            <Text style={globalStyles.deleteText}>Delete list</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  };
 
   type stringMusts = { comp: string };
   const StringText = ({ comp }: stringMusts) => (
     <View style={globalStyles.inLineText}>
-      <Text style={globalStyles.text}>{comp}</Text>
-      <Pressable
-        onPress={() => {
-          updateComplimentList(compliments.filter((c) => c !== comp));
-        }}
-      >
-        <Text style={globalStyles.deleteText}>Delete</Text>
-      </Pressable>
+      <View style={globalStyles.fileNameContainer}>
+        <Text style={globalStyles.text}>{comp}</Text>
+      </View>
+      <View style={globalStyles.deleteFileTextContainer}>
+        <Pressable
+          onPress={() => {
+            updateComplimentList(compliments.filter((c) => c !== comp));
+          }}
+        >
+          <Text style={globalStyles.deleteText}>Delete</Text>
+        </Pressable>
+      </View>
     </View>
   );
 
@@ -128,7 +139,11 @@ const Customization = () => {
           <Pressable
             onPress={() => {
               if (currentFile !== "") {
-                createNewFile(currentFile);
+                createNewFile(
+                  listDir,
+                  currentFile + ".json",
+                  JSON.stringify(["congrats on making a new list"]),
+                );
                 loadFiles();
                 updatecurrentFile("");
               }
@@ -142,7 +157,7 @@ const Customization = () => {
           <Text style={globalStyles.text}>{currentFile}</Text>
           <Pressable
             onPress={() => {
-              exitComplimentsList(currentFile);
+              exitFile(currentFile);
             }}
           >
             <Text style={globalStyles.deleteText}>Save compliment table</Text>

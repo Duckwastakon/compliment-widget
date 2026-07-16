@@ -21,11 +21,31 @@ export const globalStyles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: colors.textColor,
+    flexWrap: "wrap",
   },
 
   title: {
     fontSize: 24,
+    fontWeight: "bold",
     color: colors.textColor,
+  },
+
+  fileNameContainer: {
+    flex: 7,
+    marginLeft: 4,
+    marginRight: 4,
+    padding: 2,
+  },
+
+  deleteFileTextContainer: {
+    flex: 2,
+    marginLeft: 4,
+    marginRight: 4,
+    padding: 2,
+  },
+
+  activeSlider: {
+    flex: 1,
   },
 
   deleteText: {
@@ -46,7 +66,6 @@ export const globalStyles = StyleSheet.create({
   },
 
   inLineText: {
-    display: "flex",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",

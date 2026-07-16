@@ -12,19 +12,32 @@ export default function Index() {
   const [hours, updateHours] = useState("xx");
 
   const generateString = async () => {
-    let chosenFile = await AsyncStorage.getItem("username");
+    const chosenFiles = await AsyncStorage.getItem("activeFiles");
+
+    let chosenFile;
 
     const dir = new Directory(Paths.document, "lists");
     dir.create({ idempotent: true });
 
-    if (!chosenFile) {
+    if (chosenFiles === null) {
       chosenFile = "Main.json";
+    } else {
+      const allFiles = JSON.parse(chosenFiles);
+      if (allFiles.length === 0) {
+        chosenFile = "Main.json";
+      } else {
+        chosenFile = allFiles[Math.floor(Math.random() * allFiles.length)];
+      }
     }
 
     const file = new File(dir, chosenFile);
 
     const content = JSON.parse(file.textSync());
-    const newString = content[Math.floor(Math.random() * content.length)];
+    const lastString = await AsyncStorage.getItem("lastString");
+    let newString = content[Math.floor(Math.random() * content.length)];
+    while (newString === lastString && content.length > 1) {
+      newString = content[Math.floor(Math.random() * content.length)];
+    }
 
     await AsyncStorage.setItem("lastString", newString);
     await AsyncStorage.setItem(
@@ -71,8 +84,6 @@ export default function Index() {
         "nextUpdateTime",
         (Date.now() + 60 * 1000 * 60 * 24).toString(),
       );
-
-      console.log("Timeout");
       generateString();
       return;
     }
@@ -92,9 +103,9 @@ export default function Index() {
       secondString.substring(secondString.length - 2, secondString.length),
     );
 
-    console.log(
-      hours.toString() + ":" + minutes.toString() + ":" + seconds.toString(),
-    );
+    //console.log(
+    //  hours.toString() + ":" + minutes.toString() + ":" + seconds.toString(),
+    //);
   };
 
   useEffect(() => {
