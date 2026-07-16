@@ -89,4 +89,8 @@ export const globalStyles = StyleSheet.create({
     color: colors.textColor,
     textAlign: "left",
   },
+
+  skipTimer: {
+    marginTop: 20,
+  },
 });

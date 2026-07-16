@@ -1,9 +1,11 @@
 import { globalStyles } from "@/globals/Global";
 import { Pressable, Text, View } from "react-native";
 
+import { HelloWidget } from "@/widgets/androidWidget";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Directory, File, Paths } from "expo-file-system";
 import { useEffect, useState } from "react";
+import { WidgetPreview } from "react-native-android-widget";
 
 export default function Index() {
   const [generatedString, updateString] = useState("");
@@ -120,6 +122,11 @@ export default function Index() {
 
   return (
     <View style={globalStyles.container}>
+      <WidgetPreview
+        renderWidget={() => HelloWidget()}
+        width={320}
+        height={180}
+      />
       <Text style={globalStyles.title}>Main page</Text>
       <View style={globalStyles.complimentContainer}>
         <Text style={globalStyles.complimentText}>{generatedString}</Text>
@@ -127,7 +134,7 @@ export default function Index() {
       <Text style={globalStyles.text}>
         next compliment in {hours}:{minutes}:{seconds}
       </Text>
-      <Pressable onPress={generateString}>
+      <Pressable style={globalStyles.skipTimer} onPress={generateString}>
         <Text style={globalStyles.text}>Skip timer</Text>
       </Pressable>
     </View>
