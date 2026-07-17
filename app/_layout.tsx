@@ -1,10 +1,25 @@
-import { Tabs } from "expo-router";
+import { loadCurrentTheme } from "@/globals/dataController";
+import { allThemeDesigns, SelectedTheme } from "@/globals/Global";
+import { Stack } from "expo-router";
+import { useState } from "react";
 
-const TabBar = () => (
-  <Tabs screenOptions={{ headerShown: false }}>
-    <Tabs.Screen name="index" options={{ title: "home" }} />
-    <Tabs.Screen name="customization" options={{ title: "custom" }} />
-  </Tabs>
-);
+const ThemeSetter = () => {
+  const currentTheme: string = loadCurrentTheme();
+  let currentThemeData = allThemeDesigns[currentTheme];
+  if (currentThemeData === undefined) {
+    currentThemeData = allThemeDesigns["dark"];
+  }
 
-export default TabBar;
+  console.log(currentTheme);
+
+  const [theme, setTheme] = useState(currentThemeData);
+  console.log(theme);
+
+  return (
+    <SelectedTheme.Provider value={{ theme, setTheme }}>
+      <Stack />
+    </SelectedTheme.Provider>
+  );
+};
+
+export default ThemeSetter;

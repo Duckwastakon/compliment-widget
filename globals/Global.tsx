@@ -1,13 +1,42 @@
+import { createContext } from "react";
 import { StyleSheet } from "react-native";
 
-export const colors = {
-  background: "#222222",
-  darkBackground: "#353535",
-  textColor: "#ffffff",
-  clickColor: "#748cb4",
-  scrollColor: "#3de285",
-  borderColor: "#3c3c3c",
-  deleteTextColor: "#e04537",
+export const allThemeDesigns: Record<string, Record<string, string>> = {
+  dark: {
+    backgroundColor: "#232323",
+    textColor: "#ffffff",
+    deepBackgroundColor: "#555555",
+    outlineColor: "#101010",
+    specialTextColor: "#cfd0d1",
+  },
+  light: {
+    backgroundColor: "#ffffff",
+    textColor: "#000000",
+    deepBackgroundColor: "#bbbbbb",
+    outlineColor: "#646464",
+    specialTextColor: "#191a1b",
+  },
+  purple: {
+    backgroundColor: "#A06CD5",
+    textColor: "#E2CFEA",
+    deepBackgroundColor: "#6247AA",
+    outlineColor: "#062726",
+    specialTextColor: "#102B3F",
+  },
+  rose: {
+    backgroundColor: "#EEABC4",
+    textColor: "#E15A97",
+    deepBackgroundColor: "#C799A6",
+    outlineColor: "#4B2840",
+    specialTextColor: "#861388",
+  },
+  forest: {
+    backgroundColor: "#172A3A",
+    textColor: "#508991",
+    deepBackgroundColor: "#004346",
+    outlineColor: "#508991",
+    specialTextColor: "#75DDDD",
+  },
 };
 
 export const globalStyles = StyleSheet.create({
@@ -15,19 +44,16 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.background,
   },
 
   text: {
     fontSize: 16,
-    color: colors.textColor,
     flexWrap: "wrap",
   },
 
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: colors.textColor,
   },
 
   fileNameContainer: {
@@ -50,16 +76,13 @@ export const globalStyles = StyleSheet.create({
 
   deleteText: {
     fontSize: 16,
-    color: colors.deleteTextColor,
     textAlign: "right",
   },
 
   scroll: {
-    backgroundColor: colors.darkBackground,
     margin: 16,
     borderWidth: 4,
     borderRadius: 4,
-    borderColor: colors.borderColor,
     maxHeight: "40%",
     alignSelf: "center",
     width: "80%",
@@ -76,7 +99,6 @@ export const globalStyles = StyleSheet.create({
   complimentContainer: {
     margin: 8,
     padding: 10,
-    backgroundColor: colors.darkBackground,
     width: "80%",
     maxHeight: "25%",
     minHeight: "10%",
@@ -86,11 +108,34 @@ export const globalStyles = StyleSheet.create({
 
   complimentText: {
     fontSize: 24,
-    color: colors.textColor,
     textAlign: "left",
   },
 
   skipTimer: {
     marginTop: 20,
   },
+
+  widgetCustomContainer: {
+    flex: 1,
+    alignItems: "center",
+    alignContent: "center",
+  },
+
+  widgetFlatList: {
+    flex: 1,
+    width: "100%",
+    alignSelf: "center",
+    paddingTop: 24,
+    paddingBottom: 24,
+  },
+
+  widgetContOrdering: {
+    alignItems: "center",
+    alignContent: "center",
+  },
+});
+
+export const SelectedTheme = createContext({
+  theme: allThemeDesigns["dark"],
+  setTheme: (val: Record<string, string>) => {},
 });

@@ -1,4 +1,4 @@
-import { globalStyles } from "@/globals/Global";
+import { globalStyles, SelectedTheme } from "@/globals/Global";
 import { Pressable, Text, View } from "react-native";
 
 import {
@@ -7,13 +7,15 @@ import {
   timeToString,
 } from "@/globals/dataController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Index() {
   const [generatedString, updateString] = useState("");
   const [seconds, updateSeconds] = useState("xx");
   const [minutes, updateMinutes] = useState("xx");
   const [hours, updateHours] = useState("xx");
+
+  const { theme } = useContext(SelectedTheme);
 
   const generateString = async () => {
     updateString(await getNewCompliment());
@@ -73,16 +75,32 @@ export default function Index() {
   });
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Main page</Text>
-      <View style={globalStyles.complimentContainer}>
-        <Text style={globalStyles.complimentText}>{generatedString}</Text>
+    <View
+      style={[
+        globalStyles.container,
+        { backgroundColor: theme.backgroundColor },
+      ]}
+    >
+      <Text style={[globalStyles.title, { color: theme.textColor }]}>
+        Main page
+      </Text>
+      <View
+        style={[
+          globalStyles.complimentContainer,
+          { backgroundColor: theme.deepBackgroundColor },
+        ]}
+      >
+        <Text style={[globalStyles.complimentText, { color: theme.textColor }]}>
+          {generatedString}
+        </Text>
       </View>
-      <Text style={globalStyles.text}>
+      <Text style={[globalStyles.text, { color: theme.textColor }]}>
         next compliment in {hours}:{minutes}:{seconds}
       </Text>
       <Pressable style={globalStyles.skipTimer} onPress={generateString}>
-        <Text style={globalStyles.text}>Skip timer</Text>
+        <Text style={[globalStyles.text, { color: theme.specialTextColor }]}>
+          Skip timer
+        </Text>
       </Pressable>
     </View>
   );

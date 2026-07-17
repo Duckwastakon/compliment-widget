@@ -58,7 +58,7 @@
             {
               "name": "dispWidget",
               "label": "disp",
-              "minWidth": "320dp",
+              "minWidth": "160dp",
               "minHeight": "120dp",
               "targetCellWidth": 5,
               "targetCellHeight": 2,

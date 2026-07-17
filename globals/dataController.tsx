@@ -109,3 +109,14 @@ export const timeToString = (time: number) => {
 
   return { hourString, minuteString, secondString };
 };
+
+export const setNewTheme = (newTheme: string) => {
+  sqliteStorage.setItemSync(LAST_THEME_KEY, newTheme);
+};
+
+export function getCurrentTheme() {
+  return sqliteStorage.getItemSync(LAST_THEME_KEY);
+}
+export const loadCurrentTheme = () => {
+  return sqliteStorage.getItemSync(LAST_THEME_KEY) || "purple";
+};

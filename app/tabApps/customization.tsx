@@ -1,5 +1,5 @@
 import { Directory, File, Paths } from "expo-file-system";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   FlatList,
   Pressable,
@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 
-import { colors, globalStyles } from "@/globals/Global";
+import { globalStyles, SelectedTheme } from "@/globals/Global";
 import {
   createNewFile,
   deleteFile,
@@ -24,6 +24,8 @@ export const ACTIVE_FILE_KEY = "ACTIVEFILES";
 const Customization = () => {
   const listDir = new Directory(Paths.document, "lists");
   listDir.create({ idempotent: true });
+
+  const { theme } = useContext(SelectedTheme);
 
   const [compliment, updateCompliment] = useState("");
   const [compliments, updateComplimentList] = useState<string[]>([]);
@@ -101,7 +103,9 @@ const Customization = () => {
               openFile(fileName);
             }}
           >
-            <Text style={globalStyles.text}>{fileName}</Text>
+            <Text style={[globalStyles.text, { color: theme.textColor }]}>
+              {fileName}
+            </Text>
           </Pressable>
         </View>
         <View style={globalStyles.activeSlider}>
@@ -114,7 +118,14 @@ const Customization = () => {
               loadFiles();
             }}
           >
-            <Text style={globalStyles.deleteText}>Delete list</Text>
+            <Text
+              style={[
+                globalStyles.deleteText,
+                { color: theme.specialTextColor },
+              ]}
+            >
+              Delete list
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -125,7 +136,9 @@ const Customization = () => {
   const StringText = ({ comp }: stringMusts) => (
     <View style={globalStyles.inLineText}>
       <View style={globalStyles.fileNameContainer}>
-        <Text style={globalStyles.text}>{comp}</Text>
+        <Text style={[globalStyles.text, { color: theme.textColor }]}>
+          {comp}
+        </Text>
       </View>
       <View style={globalStyles.deleteFileTextContainer}>
         <Pressable
@@ -133,25 +146,40 @@ const Customization = () => {
             updateComplimentList(compliments.filter((c) => c !== comp));
           }}
         >
-          <Text style={globalStyles.deleteText}>Delete</Text>
+          <Text
+            style={[globalStyles.deleteText, { color: theme.specialTextColor }]}
+          >
+            Delete
+          </Text>
         </Pressable>
       </View>
     </View>
   );
 
   return (
-    <View style={globalStyles.container}>
+    <View
+      style={[
+        globalStyles.container,
+        { backgroundColor: theme.backgroundColor },
+      ]}
+    >
       {!viewing ? (
         <>
           <FlatList
-            style={globalStyles.scroll}
+            style={[
+              globalStyles.scroll,
+              {
+                backgroundColor: theme.deepBackgroundColor,
+                borderColor: theme.outlineColor,
+              },
+            ]}
             data={listFiles}
             renderItem={({ item }) => <FileText fileName={item.name} />}
           />
           <TextInput
-            style={globalStyles.text}
+            style={[globalStyles.text, { color: theme.textColor }]}
             placeholder="Enter new file name"
-            placeholderTextColor={colors.textColor}
+            placeholderTextColor={theme.textColor}
             onChangeText={updatecurrentFile}
             value={currentFile}
           />
@@ -168,29 +196,48 @@ const Customization = () => {
               }
             }}
           >
-            <Text style={globalStyles.text}>Create new list</Text>
+            <Text
+              style={[globalStyles.text, { color: theme.specialTextColor }]}
+            >
+              Create new list
+            </Text>
           </Pressable>
         </>
       ) : (
         <>
-          <Text style={globalStyles.text}>{currentFile}</Text>
+          <Text style={[globalStyles.text, { color: theme.textColor }]}>
+            {currentFile}
+          </Text>
           <Pressable
             onPress={() => {
               exitFile(currentFile);
             }}
           >
-            <Text style={globalStyles.deleteText}>Save compliment table</Text>
+            <Text
+              style={[
+                globalStyles.deleteText,
+                { color: theme.specialTextColor },
+              ]}
+            >
+              Save compliment table
+            </Text>
           </Pressable>
 
           <FlatList
-            style={globalStyles.scroll}
+            style={[
+              globalStyles.scroll,
+              {
+                backgroundColor: theme.deepBackgroundColor,
+                borderColor: theme.outlineColor,
+              },
+            ]}
             data={compliments}
             renderItem={({ item }) => <StringText comp={item} />}
           />
           <TextInput
-            style={globalStyles.text}
+            style={[globalStyles.text, { color: theme.textColor }]}
             placeholder="Enter compliment"
-            placeholderTextColor={colors.textColor}
+            placeholderTextColor={theme.textColor}
             onChangeText={updateCompliment}
             value={compliment}
           />
@@ -202,7 +249,11 @@ const Customization = () => {
               updateCompliment("");
             }}
           >
-            <Text style={globalStyles.text}>add compliment</Text>
+            <Text
+              style={[globalStyles.text, { color: theme.specialTextColor }]}
+            >
+              add compliment
+            </Text>
           </Pressable>
         </>
       )}
