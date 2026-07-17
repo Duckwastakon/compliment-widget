@@ -54,7 +54,19 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
     }
 
     case "WIDGET_UPDATE":
-      // Not needed for now
+      if (widgetInfo.widgetName === "dispWidget") {
+        const theme = getStoredTheme();
+        const lastString = getStoredString();
+        const timeLeft = getStoredTime();
+
+        props.renderWidget(
+          <StringWidget
+            theme={theme}
+            timeLeft={timeLeft}
+            currentString={lastString}
+          />,
+        );
+      }
       break;
 
     case "WIDGET_RESIZED":

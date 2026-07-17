@@ -62,15 +62,6 @@ const Customization = () => {
   const FileText = ({ fileName }: fileMusts) => {
     const [active, changeValue] = useState(false);
 
-    const checkSwitch = async () => {
-      const currentActive = await AsyncStorage.getItem("activeFiles");
-      if (currentActive !== null) {
-        if (currentActive.includes(fileName)) {
-          changeValue(true);
-        }
-      }
-    };
-
     const toggleSwitch = async () => {
       changeValue((previousState) => !previousState);
 
@@ -90,7 +81,14 @@ const Customization = () => {
     };
 
     useEffect(() => {
-      console.log("Runs only once");
+      const checkSwitch = async () => {
+        const currentActive = await AsyncStorage.getItem("activeFiles");
+        if (currentActive !== null) {
+          if (currentActive.includes(fileName)) {
+            changeValue(true);
+          }
+        }
+      };
 
       checkSwitch();
     }, []);

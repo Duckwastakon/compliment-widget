@@ -38,13 +38,42 @@ interface stringWidgetProperites {
   timeLeft: number;
 }
 
-const bgColors: Record<string, ColorProp> = {
-  light: "#ffffff",
-  dark: "#000000",
-};
-const textColors: Record<string, ColorProp> = {
-  light: "#000000",
-  dark: "#ffffff",
+const allThemeDesigns: Record<string, Record<string, ColorProp>> = {
+  dark: {
+    backgroundColor: "#232323",
+    textColor: "#ffffff",
+    deepBackgroundColor: "#555555",
+    outlineColor: "#101010",
+    specialTextColor: "#cfd0d1",
+  },
+  light: {
+    backgroundColor: "#ffffff",
+    textColor: "#000000",
+    deepBackgroundColor: "#bbbbbb",
+    outlineColor: "#646464",
+    specialTextColor: "#191a1b",
+  },
+  purple: {
+    backgroundColor: "#A06CD5",
+    textColor: "#E2CFEA",
+    deepBackgroundColor: "#6247AA",
+    outlineColor: "#062726",
+    specialTextColor: "#102B3F",
+  },
+  rose: {
+    backgroundColor: "#EEABC4",
+    textColor: "#E15A97",
+    deepBackgroundColor: "#C799A6",
+    outlineColor: "#4B2840",
+    specialTextColor: "#861388",
+  },
+  forest: {
+    backgroundColor: "#172A3A",
+    textColor: "#508991",
+    deepBackgroundColor: "#004346",
+    outlineColor: "#508991",
+    specialTextColor: "#75DDDD",
+  },
 };
 
 export function StringWidget({
@@ -69,8 +98,8 @@ export function StringWidget({
       secondString.substring(minuteString.length - 2, minuteString.length);
   }
 
-  const textColor = textColors[theme] || "#000000";
-  const bgColor = bgColors[theme] || "#000000";
+  const textColor = allThemeDesigns[theme]["textColor"] || "#000000";
+  const bgColor = allThemeDesigns[theme]["backgroundColor"] || "#000000";
 
   return (
     <FlexWidget
