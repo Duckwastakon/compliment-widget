@@ -1,14 +1,22 @@
 import { setNewTheme } from "@/globals/dataController";
 import { allThemeDesigns, globalStyles, SelectedTheme } from "@/globals/Global";
-import { StringWidget } from "@/widgets/androidWidget";
 import { useContext } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
-import { requestWidgetUpdate } from "react-native-android-widget";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { StringWidget } from "@/widgets/androidWidget";
 import sqliteStorage from "expo-sqlite/kv-store";
+import { requestWidgetUpdate } from "react-native-android-widget";
 
-const allThemes: string[] = ["dark", "light", "purple", "rose", "forest"];
+const allThemes: string[] = [
+  "dark",
+  "light",
+  "purple",
+  "rose",
+  "forest",
+  "fire",
+  "oceanic",
+];
 
 export default function WidgetCustomizatiom() {
   const { theme, setTheme } = useContext(SelectedTheme);
@@ -41,6 +49,8 @@ export default function WidgetCustomizatiom() {
         onPress={() => {
           setNewTheme(styleName);
           setTheme(allThemeDesigns[styleName]);
+
+          // Android widget
           requestWidgetUpdate({
             widgetName: "dispWidget",
             renderWidget: () => (
@@ -51,6 +61,15 @@ export default function WidgetCustomizatiom() {
               />
             ),
           });
+
+          // IOS Widget (removed due to not being able to test it)
+          //const props = {
+          //  currentCompliment: "Yo",
+          //  updateTime: Date.now(),
+          // backgroundColor: allThemeDesigns[styleName]["backgroundColor"],
+          //textColor: allThemeDesigns[styleName]["textColor"],
+          //};
+          //MyWidget.updateSnapshot(props);
         }}
       >
         <View
@@ -58,7 +77,7 @@ export default function WidgetCustomizatiom() {
             width: "90%",
             minWidth: "90%",
             borderRadius: 4,
-            padding: 16,
+            padding: 8,
             alignItems: "center",
             alignContent: "center",
             backgroundColor: bgColor,
@@ -87,16 +106,25 @@ export default function WidgetCustomizatiom() {
         { backgroundColor: theme.backgroundColor },
       ]}
     >
-      <Text
+      <View
         style={{
-          fontSize: 20,
           alignItems: "center",
           alignContent: "center",
-          color: theme.textColor,
+          height: "10%",
+          width: "100%",
         }}
       >
-        Choose a widget color scheme
-      </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            alignItems: "center",
+            alignContent: "center",
+            color: theme.textColor,
+          }}
+        >
+          Choose a widget color scheme
+        </Text>
+      </View>
       <FlatList
         style={[
           globalStyles.widgetFlatList,

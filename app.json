@@ -9,6 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "bundleIdentifier": "com.duck.complimentwidget",
       "supportsTablet": true
     },
     "android": {
@@ -65,13 +66,28 @@
               "description": "Yoooo",
               "previewImage": "./assets/images/icon.png",
               "updatePeriodMillis": 1800000,
-              //"widgetFeatures": "reconfigurable",
               "resizeMode": "horizontal|vertical"
             }
           ]
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-font",
+      "expo-image",
+      "expo-web-browser",
+      [
+        "expo-widgets",
+        {
+          "widgets": [
+            {
+              "name": "MyWidget",
+              "displayName": "My Widget",
+              "description": "A sample home screen widget",
+              "supportedFamilies": ["systemMedium", "systemLarge"]
+            }
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

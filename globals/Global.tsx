@@ -37,6 +37,20 @@ export const allThemeDesigns: Record<string, Record<string, string>> = {
     outlineColor: "#508991",
     specialTextColor: "#75DDDD",
   },
+  fire: {
+    backgroundColor: "#e9b340",
+    textColor: "#e09f07",
+    deepBackgroundColor: "#fa6d15",
+    outlineColor: "#fe4b1f",
+    specialTextColor: "#bbec1c",
+  },
+  oceanic: {
+    backgroundColor: "#4940e9",
+    textColor: "#4dcefd",
+    deepBackgroundColor: "#8a2aff",
+    outlineColor: "#0f6d84",
+    specialTextColor: "#00feed",
+  },
 };
 
 export const globalStyles = StyleSheet.create({
