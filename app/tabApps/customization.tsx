@@ -14,8 +14,10 @@ import {
   createNewFile,
   deleteFile,
   getAllFiles,
+  getFile,
   readFile,
   saveFile,
+  saveFileToDevice,
 } from "@/globals/fileController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import sqliteStorage from "expo-sqlite/kv-store";
@@ -178,8 +180,11 @@ const Customization = () => {
             style={[globalStyles.text, { color: theme.textColor }]}
             placeholder="Enter new file name"
             placeholderTextColor={theme.textColor}
-            onChangeText={updatecurrentFile}
             value={currentFile}
+            onChangeText={(txt) => {
+              updatecurrentFile(txt);
+              console.log(currentFile);
+            }}
           />
           <Pressable
             onPress={() => {
@@ -198,6 +203,17 @@ const Customization = () => {
               style={[globalStyles.text, { color: theme.specialTextColor }]}
             >
               Create new list
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              getFile();
+            }}
+          >
+            <Text
+              style={[globalStyles.text, { color: theme.specialTextColor }]}
+            >
+              upload file
             </Text>
           </Pressable>
         </>
@@ -251,6 +267,19 @@ const Customization = () => {
               style={[globalStyles.text, { color: theme.specialTextColor }]}
             >
               add compliment
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => {
+              console.log(currentFile);
+              saveFileToDevice(listDir, currentFile);
+            }}
+          >
+            <Text
+              style={[globalStyles.text, { color: theme.specialTextColor }]}
+            >
+              download file
             </Text>
           </Pressable>
         </>

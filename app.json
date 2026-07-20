@@ -83,11 +83,15 @@
               "name": "MyWidget",
               "displayName": "My Widget",
               "description": "A sample home screen widget",
-              "supportedFamilies": ["systemMedium", "systemLarge"]
+              "supportedFamilies": [
+                "systemMedium",
+                "systemLarge"
+              ]
             }
           ]
         }
-      ]
+      ],
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true,
