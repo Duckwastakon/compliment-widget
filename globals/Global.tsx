@@ -2,19 +2,26 @@ import { createContext } from "react";
 import { StyleSheet } from "react-native";
 
 export const allThemeDesigns: Record<string, Record<string, string>> = {
+  light: {
+    primaryColor: "#FFFFFF",
+    secondaryColor: "#CECECE",
+    thirdColor: "#A2A0A0",
+    textColor: "#000000",
+    buttonTextColor: "#FFFFFF",
+    buttonMainColor: "#60AFFF",
+    buttonMainClickedColor: "#1083FB",
+    buttonMainDisabledColor: "#BBDCFF",
+    buttonSecondaryColor: "#59DAFF",
+    buttonSecondaryClickedColor: "#07C5FB",
+    buttonSecondaryDisabledColor: "#B8EFFF",
+    accentColor: "#3799FF",
+  },
   dark: {
     backgroundColor: "#232323",
     textColor: "#ffffff",
     deepBackgroundColor: "#555555",
     outlineColor: "#101010",
     specialTextColor: "#cfd0d1",
-  },
-  light: {
-    backgroundColor: "#ffffff",
-    textColor: "#000000",
-    deepBackgroundColor: "#bbbbbb",
-    outlineColor: "#646464",
-    specialTextColor: "#191a1b",
   },
   purple: {
     backgroundColor: "#A06CD5",
@@ -53,11 +60,161 @@ export const allThemeDesigns: Record<string, Record<string, string>> = {
   },
 };
 
+export const textSizes: Record<string, number> = {
+  header: 32,
+  subHeader: 24,
+  subSubHeader: 20,
+  text: 16,
+  subText: 12,
+};
+
+export const indexStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  mainIndexContainer: {
+    width: "90%",
+    height: "80%",
+    justifyContent: "center",
+  },
+
+  thanksText: {
+    maxWidth: "65%",
+    fontSize: textSizes.subText,
+    marginBottom: 16,
+  },
+
+  currentComplimentContainer: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    marginBottom: 4,
+    width: "100%",
+    minHeight: "10%",
+    maxHeight: "40%",
+    borderRadius: 16,
+    justifyContent: "center",
+  },
+
+  complimentText: {
+    fontSize: textSizes.header,
+    fontWeight: 600,
+    textAlign: "left",
+  },
+
+  timerText: {
+    fontSize: textSizes.subSubHeader,
+    textAlign: "left",
+    marginBottom: 4,
+  },
+
+  skipTimerButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    width: "30%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 56,
+  },
+
+  skipTimerText: { fontSize: textSizes.text },
+
+  settingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  extraSettingTitle: {
+    fontSize: textSizes.text,
+    fontWeight: "bold",
+    marginBottom: 12,
+  },
+
+  settingText: {
+    fontSize: textSizes.subText,
+    fontWeight: "500",
+    marginBottom: 4,
+  },
+
+  warningText: {
+    fontSize: textSizes.subText,
+    fontWeight: "400",
+    marginBottom: 32,
+  },
+
+  digitContainer: {
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 32,
+    marginBottom: 16,
+  },
+
+  singleDigitContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    borderRadius: 12,
+  },
+
+  digitText: {
+    fontSize: textSizes.subText,
+    marginBottom: 4,
+  },
+
+  changeDigitContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+  },
+
+  changeButton: {
+    borderRadius: 12,
+    width: 24,
+    aspectRatio: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  plusMinusText: {
+    fontSize: textSizes.text,
+    fontWeight: 600,
+  },
+
+  updateButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    marginBottom: 4,
+    width: "55%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  updateButtonText: {
+    fontSize: textSizes.subText,
+    fontWeight: "bold",
+  },
+
+  checkBoxContainer: {
+    flexDirection: "row",
+    gap: 8,
+  },
+
+  checkBoxText: {
+    fontSize: textSizes.text,
+    fontWeight: "bold",
+  },
+});
+
 export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
   },
 
   text: {
@@ -68,6 +225,9 @@ export const globalStyles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    textAlign: "left",
+    flexWrap: "wrap",
+    margin: 6,
   },
 
   fileNameContainer: {
@@ -117,7 +277,12 @@ export const globalStyles = StyleSheet.create({
   },
 
   skipTimer: {
-    marginTop: 20,
+    marginTop: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 16,
+    paddingLeft: 16,
+    borderRadius: 8,
   },
 
   widgetCustomContainer: {
@@ -179,7 +344,6 @@ export const globalStyles = StyleSheet.create({
     minWidth: "80%",
     padding: 12,
     borderRadius: 8,
-    backgroundColor: "#c72828",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -189,7 +353,6 @@ export const globalStyles = StyleSheet.create({
     width: "40%",
     padding: 12,
     borderRadius: 8,
-    backgroundColor: "#28c72b",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -199,7 +362,6 @@ export const globalStyles = StyleSheet.create({
     width: "40%",
     padding: 12,
     borderRadius: 8,
-    backgroundColor: "#9a28c7",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -225,7 +387,6 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "center",
     gap: 6,
     padding: 16,
-    backgroundColor: "#ffffff",
     borderRadius: 12,
   },
 
@@ -238,7 +399,6 @@ export const globalStyles = StyleSheet.create({
 
   changeButtonDesign: {
     padding: 8,
-    backgroundColor: "#c2c2c2",
     borderRadius: 12,
   },
 
@@ -248,9 +408,25 @@ export const globalStyles = StyleSheet.create({
     paddingBottom: 8,
     paddingRight: 14,
     paddingLeft: 14,
-    backgroundColor: "#8a6e6e",
     borderRadius: 12,
     textAlign: "center",
+  },
+
+  setClickCheckboxContainer: {
+    flexDirection: "row",
+    gap: 8,
+  },
+
+  updateButton: {
+    padding: 12,
+    borderRadius: 12,
+  },
+
+  compliment_fileText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    flexWrap: "wrap",
+    textAlign: "left",
   },
 });
 

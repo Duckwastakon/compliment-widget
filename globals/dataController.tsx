@@ -132,7 +132,9 @@ export const loadCurrentTheme = () => {
 };
 export const setTimeValue = (value: string) => {
   sqliteStorage.setItemSync(EXTRA_TIME_KEY, value);
+  setNewTime();
 };
+
 export const getExtraTimeValue = () => {
   return sqliteStorage.getItemSync(EXTRA_TIME_KEY);
 };

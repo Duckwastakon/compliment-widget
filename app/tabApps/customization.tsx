@@ -104,7 +104,12 @@ const Customization = () => {
               openFile(fileName);
             }}
           >
-            <Text style={[globalStyles.text, { color: theme.textColor }]}>
+            <Text
+              style={[
+                globalStyles.compliment_fileText,
+                { color: theme.textColor },
+              ]}
+            >
               {fileName}
             </Text>
           </Pressable>
@@ -144,7 +149,7 @@ const Customization = () => {
                   { color: theme.specialTextColor },
                 ]}
               >
-                Delete list
+                cant
               </Text>
             </Pressable>
           </View>
@@ -157,7 +162,9 @@ const Customization = () => {
   const StringText = ({ comp }: stringMusts) => (
     <View style={globalStyles.inLineText}>
       <View style={globalStyles.fileNameContainer}>
-        <Text style={[globalStyles.text, { color: theme.textColor }]}>
+        <Text
+          style={[globalStyles.compliment_fileText, { color: theme.textColor }]}
+        >
           {comp}
         </Text>
       </View>
@@ -191,7 +198,7 @@ const Customization = () => {
               Customization page
             </Text>
             <Text style={[globalStyles.text, { color: theme.textColor }]}>
-              click on a list to edit it
+              click a edit a list
             </Text>
           </View>
           <FlatList
@@ -202,6 +209,7 @@ const Customization = () => {
                 borderColor: theme.outlineColor,
               },
             ]}
+            contentContainerStyle={{ gap: 8 }}
             data={listFiles}
             renderItem={({ item }) => <FileText fileName={item.name} />}
           />
@@ -281,6 +289,7 @@ const Customization = () => {
                 borderColor: theme.outlineColor,
               },
             ]}
+            contentContainerStyle={{ gap: 8 }}
             data={compliments}
             renderItem={({ item }) => <StringText comp={item} />}
           />
@@ -331,7 +340,7 @@ const Customization = () => {
               <Text
                 style={[globalStyles.text, { color: theme.specialTextColor }]}
               >
-                WIP
+                Paste compliments
               </Text>
             </Pressable>
           </View>

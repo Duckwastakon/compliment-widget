@@ -1,5 +1,5 @@
-import { globalStyles, SelectedTheme } from "@/globals/Global";
-import { Pressable, Text, View } from "react-native";
+import { indexStyles, SelectedTheme } from "@/globals/Global";
+import { Text, TouchableHighlight, View } from "react-native";
 
 import {
   getNewCompliment,
@@ -138,175 +138,267 @@ export default function Index() {
 
   return (
     <SafeAreaView
-      style={[
-        globalStyles.container,
-        { backgroundColor: theme.backgroundColor },
-      ]}
+      style={[indexStyles.container, { backgroundColor: theme.primaryColor }]}
     >
-      <View style={globalStyles.mainIndexContainer}>
-        <Text style={[globalStyles.title, { color: theme.textColor }]}>
-          Thank you for trying compliment widget, change anything you would like
-          to and enjoy!
+      <View style={indexStyles.mainIndexContainer}>
+        <Text style={[indexStyles.thanksText, { color: theme.textColor }]}>
+          Thank you for trying compliment widget, configure the app and enjoy!
         </Text>
         <View
           style={[
-            globalStyles.complimentContainer,
-            { backgroundColor: theme.deepBackgroundColor },
+            indexStyles.currentComplimentContainer,
+            { backgroundColor: theme.secondaryColor },
           ]}
         >
           <Text
-            style={[globalStyles.complimentText, { color: theme.textColor }]}
+            style={[indexStyles.complimentText, { color: theme.textColor }]}
           >
             {generatedString}
           </Text>
         </View>
-        <Text style={[globalStyles.text, { color: theme.textColor }]}>
+        <Text style={[indexStyles.timerText, { color: theme.accentColor }]}>
           next compliment in {hours}:{minutes}:{seconds}
         </Text>
-        <Pressable style={globalStyles.skipTimer} onPress={generateString}>
-          <Text style={[globalStyles.text, { color: theme.specialTextColor }]}>
+        <TouchableHighlight
+          style={[
+            indexStyles.skipTimerButton,
+            { backgroundColor: theme.buttonMainColor },
+          ]}
+          activeOpacity={0.6}
+          underlayColor={theme.buttonMainClickedColor}
+          onPress={generateString}
+        >
+          <Text
+            style={[
+              indexStyles.skipTimerText,
+              { color: theme.buttonTextColor },
+            ]}
+          >
             Skip timer
           </Text>
-        </Pressable>
-      </View>
-      <View style={globalStyles.timerSettingContainer}>
-        <Text>Change compliment recieving delay</Text>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-          }}
-        >
-          <View style={globalStyles.singleDigitContainer}>
-            <Text style={[globalStyles.text, { color: theme.textColor }]}>
-              Hours
-            </Text>
-            <View style={globalStyles.increaseDecreaseContainer}>
-              <Pressable
-                style={globalStyles.changeButtonDesign}
-                onPress={() => {
-                  changeHours(1);
-                }}
-              >
-                <Text style={[globalStyles.text, { color: theme.textColor }]}>
-                  +
-                </Text>
-              </Pressable>
-              <Text
-                style={[
-                  globalStyles.text,
-                  globalStyles.singleDigitText,
-                  { color: theme.textColor },
-                ]}
-              >
-                {setHours}
+        </TouchableHighlight>
+        <View style={indexStyles.settingContainer}>
+          <Text
+            style={[indexStyles.extraSettingTitle, { color: theme.textColor }]}
+          >
+            Main settings
+          </Text>
+          <Text style={[indexStyles.settingText, { color: theme.accentColor }]}>
+            Change time between compliments
+          </Text>
+          <View style={indexStyles.digitContainer}>
+            <View style={[indexStyles.singleDigitContainer]}>
+              <Text style={[indexStyles.digitText, { color: theme.textColor }]}>
+                Hours
               </Text>
-              <Pressable
-                style={globalStyles.changeButtonDesign}
-                onPress={() => {
-                  changeHours(-1);
-                }}
-              >
-                <Text style={[globalStyles.text, { color: theme.textColor }]}>
-                  -
+              <View style={indexStyles.changeDigitContainer}>
+                <TouchableHighlight
+                  style={[
+                    indexStyles.changeButton,
+                    { backgroundColor: theme.buttonSecondaryColor },
+                  ]}
+                  underlayColor={theme.buttonSecondaryClickedColor}
+                  activeOpacity={0.6}
+                  onPress={() => {
+                    changeHours(1);
+                  }}
+                >
+                  <Text
+                    style={[
+                      indexStyles.plusMinusText,
+                      { color: theme.textColor },
+                    ]}
+                  >
+                    +
+                  </Text>
+                </TouchableHighlight>
+                <Text
+                  style={[
+                    indexStyles.plusMinusText,
+                    { color: theme.textColor },
+                  ]}
+                >
+                  {setHours}
                 </Text>
-              </Pressable>
+                <TouchableHighlight
+                  style={[
+                    indexStyles.changeButton,
+                    { backgroundColor: theme.buttonSecondaryColor },
+                  ]}
+                  underlayColor={theme.buttonSecondaryClickedColor}
+                  activeOpacity={0.6}
+                  onPress={() => {
+                    changeHours(-1);
+                  }}
+                >
+                  <Text
+                    style={[
+                      indexStyles.plusMinusText,
+                      { color: theme.textColor },
+                    ]}
+                  >
+                    -
+                  </Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={[indexStyles.singleDigitContainer]}>
+              <Text style={[indexStyles.digitText, { color: theme.textColor }]}>
+                Minutes
+              </Text>
+              <View style={indexStyles.changeDigitContainer}>
+                <TouchableHighlight
+                  style={[
+                    indexStyles.changeButton,
+                    { backgroundColor: theme.buttonSecondaryColor },
+                  ]}
+                  underlayColor={theme.buttonSecondaryClickedColor}
+                  activeOpacity={0.6}
+                  onPress={() => {
+                    changeMinutes(1);
+                  }}
+                >
+                  <Text
+                    style={[
+                      indexStyles.plusMinusText,
+                      { color: theme.textColor },
+                    ]}
+                  >
+                    +
+                  </Text>
+                </TouchableHighlight>
+                <Text
+                  style={[
+                    indexStyles.plusMinusText,
+                    { color: theme.textColor },
+                  ]}
+                >
+                  {setMinutes}
+                </Text>
+                <TouchableHighlight
+                  style={[
+                    indexStyles.changeButton,
+                    { backgroundColor: theme.buttonSecondaryColor },
+                  ]}
+                  underlayColor={theme.buttonSecondaryClickedColor}
+                  activeOpacity={0.6}
+                  onPress={() => {
+                    changeMinutes(-1);
+                  }}
+                >
+                  <Text
+                    style={[
+                      indexStyles.plusMinusText,
+                      { color: theme.textColor },
+                    ]}
+                  >
+                    -
+                  </Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={[indexStyles.singleDigitContainer]}>
+              <Text style={[indexStyles.digitText, { color: theme.textColor }]}>
+                Seconds
+              </Text>
+              <View style={indexStyles.changeDigitContainer}>
+                <TouchableHighlight
+                  style={[
+                    indexStyles.changeButton,
+                    { backgroundColor: theme.buttonSecondaryColor },
+                  ]}
+                  underlayColor={theme.buttonSecondaryClickedColor}
+                  activeOpacity={0.6}
+                  onPress={() => {
+                    changeSeconds(1);
+                  }}
+                >
+                  <Text
+                    style={[
+                      indexStyles.plusMinusText,
+                      { color: theme.textColor },
+                    ]}
+                  >
+                    +
+                  </Text>
+                </TouchableHighlight>
+                <Text
+                  style={[
+                    indexStyles.plusMinusText,
+                    { color: theme.textColor },
+                  ]}
+                >
+                  {setSeconds}
+                </Text>
+                <TouchableHighlight
+                  style={[
+                    indexStyles.changeButton,
+                    { backgroundColor: theme.buttonSecondaryColor },
+                  ]}
+                  underlayColor={theme.buttonSecondaryClickedColor}
+                  activeOpacity={0.6}
+                  onPress={() => {
+                    changeSeconds(-1);
+                  }}
+                >
+                  <Text
+                    style={[
+                      indexStyles.plusMinusText,
+                      { color: theme.textColor },
+                    ]}
+                  >
+                    -
+                  </Text>
+                </TouchableHighlight>
+              </View>
             </View>
           </View>
-          <View style={globalStyles.singleDigitContainer}>
-            <Text style={[globalStyles.text, { color: theme.textColor }]}>
-              Minutes
-            </Text>
-            <View style={globalStyles.increaseDecreaseContainer}>
-              <Pressable
-                style={globalStyles.changeButtonDesign}
-                onPress={() => {
-                  changeMinutes(1);
-                }}
-              >
-                <Text style={[globalStyles.text, { color: theme.textColor }]}>
-                  +
-                </Text>
-              </Pressable>
-              <Text
-                style={[
-                  globalStyles.text,
-                  globalStyles.singleDigitText,
-                  { color: theme.textColor },
-                ]}
-              >
-                {setMinutes}
-              </Text>
-              <Pressable
-                style={globalStyles.changeButtonDesign}
-                onPress={() => {
-                  changeMinutes(-1);
-                }}
-              >
-                <Text style={[globalStyles.text, { color: theme.textColor }]}>
-                  -
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-          <View style={globalStyles.singleDigitContainer}>
-            <Text style={[globalStyles.text, { color: theme.textColor }]}>
-              Seconds
-            </Text>
-            <View style={globalStyles.increaseDecreaseContainer}>
-              <Pressable
-                style={globalStyles.changeButtonDesign}
-                onPress={() => {
-                  changeSeconds(1);
-                }}
-              >
-                <Text style={[globalStyles.text, { color: theme.textColor }]}>
-                  +
-                </Text>
-              </Pressable>
-              <Text
-                style={[
-                  globalStyles.text,
-                  globalStyles.singleDigitText,
-                  { color: theme.textColor },
-                ]}
-              >
-                {setSeconds}
-              </Text>
-              <Pressable
-                style={globalStyles.changeButtonDesign}
-                onPress={() => {
-                  changeSeconds(-1);
-                }}
-              >
-                <Text style={[globalStyles.text, { color: theme.textColor }]}>
-                  -
-                </Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-        <Pressable
-          onPress={() => {
-            const newTimeVal =
-              1000 * Number(setSeconds) +
-              1000 * 60 * Number(setMinutes) +
-              1000 * 60 * 60 * Number(setHours);
-            setTimeValue(newTimeVal.toString());
-          }}
-        >
-          <Text>set new compliment delay</Text>
-        </Pressable>
-        <View>
-          <Checkbox
-            value={checked}
-            onValueChange={(newVal) => {
-              setChecked(newVal);
-              setSkipOnClick(newVal);
+          <TouchableHighlight
+            style={[
+              indexStyles.updateButton,
+              { backgroundColor: theme.buttonMainColor },
+            ]}
+            activeOpacity={0.6}
+            underlayColor={theme.buttonMainClickedColor}
+            onPress={() => {
+              const newTimeVal =
+                1000 * Number(setSeconds) +
+                1000 * 60 * Number(setMinutes) +
+                1000 * 60 * 60 * Number(setHours);
+              setTimeValue(newTimeVal.toString());
             }}
-          />
-          <Text>Click on widget to skip timer</Text>
+          >
+            <Text
+              style={[
+                indexStyles.updateButtonText,
+                { color: theme.buttonTextColor },
+              ]}
+            >
+              set new compliment delay
+            </Text>
+          </TouchableHighlight>
+          <Text style={[indexStyles.warningText, { color: theme.textColor }]}>
+            Warning! android widgets update every 30 minutes
+          </Text>
+          <Text style={[indexStyles.settingText, { color: theme.accentColor }]}>
+            Allow widget to skip timer when clicked
+          </Text>
+
+          <View style={indexStyles.checkBoxContainer}>
+            <Checkbox
+              value={checked}
+              color={checked ? theme.buttonSecondaryColor : undefined}
+              onValueChange={(newVal) => {
+                setChecked(newVal);
+                setSkipOnClick(newVal);
+              }}
+            />
+            <Text
+              style={[indexStyles.checkBoxText, { color: theme.accentColor }]}
+            >
+              Click on widget to skip timer
+            </Text>
+          </View>
         </View>
       </View>
     </SafeAreaView>

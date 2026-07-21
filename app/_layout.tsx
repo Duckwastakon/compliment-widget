@@ -17,7 +17,7 @@ const ThemeSetter = () => {
 
   return (
     <SelectedTheme.Provider value={{ theme, setTheme }}>
-      <Stack />
+      <Stack screenOptions={{ headerShown: false }} />
     </SelectedTheme.Provider>
   );
 };
