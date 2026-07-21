@@ -1,5 +1,6 @@
 "use no memo";
 import {
+  getExtraTimeValue,
   getNewCompliment,
   setNewTime,
   timeToString,
@@ -99,7 +100,16 @@ export function StringWidget({
   if (timeLeft < Date.now()) {
     currentString = getNewCompliment();
     setNewTime();
-    timeString = "23:59:99";
+    const { hourString, minuteString, secondString } = timeToString(
+      Number(getExtraTimeValue),
+    );
+
+    timeString =
+      hourString.substring(minuteString.length - 2, minuteString.length) +
+      ":" +
+      minuteString.substring(minuteString.length - 2, minuteString.length) +
+      ":" +
+      secondString.substring(secondString.length - 2, secondString.length);
   } else {
     const { hourString, minuteString, secondString } = timeToString(
       timeLeft - Date.now(),

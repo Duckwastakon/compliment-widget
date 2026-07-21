@@ -93,15 +93,6 @@ export const globalStyles = StyleSheet.create({
     textAlign: "right",
   },
 
-  scroll: {
-    margin: 16,
-    borderWidth: 4,
-    borderRadius: 4,
-    maxHeight: "40%",
-    alignSelf: "center",
-    width: "80%",
-  },
-
   inLineText: {
     width: "100%",
     justifyContent: "center",
@@ -146,6 +137,120 @@ export const globalStyles = StyleSheet.create({
   widgetContOrdering: {
     alignItems: "center",
     alignContent: "center",
+  },
+
+  buttonContainer: {
+    minHeight: "15%",
+    height: "15%",
+    width: "100%",
+    gap: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+
+  listContainer: {
+    minHeight: "70%",
+    height: "70%",
+    margin: 16,
+    borderWidth: 2,
+    borderRadius: 8,
+    alignSelf: "center",
+    width: "80%",
+  },
+
+  headerInfoContainer: {
+    minHeight: "5%",
+    height: "5%",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  mainInsertContainer: {
+    minHeight: "10%",
+    height: "10%",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  selectFileButton: {
+    minWidth: "80%",
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: "#c72828",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  shareFileButton: {
+    minWidth: "40%",
+    width: "40%",
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: "#28c72b",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  massInsertButton: {
+    minWidth: "40%",
+    width: "40%",
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: "#9a28c7",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  mainIndexContainer: {
+    width: "100%",
+    height: "60%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  timerSettingContainer: {
+    width: "100%",
+    height: "40%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
+
+  singleDigitContainer: {
+    width: "28%",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    padding: 16,
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+  },
+
+  increaseDecreaseContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+  },
+
+  changeButtonDesign: {
+    padding: 8,
+    backgroundColor: "#c2c2c2",
+    borderRadius: 12,
+  },
+
+  singleDigitText: {
+    padding: 6,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 14,
+    paddingLeft: 14,
+    backgroundColor: "#8a6e6e",
+    borderRadius: 12,
+    textAlign: "center",
   },
 });
 

@@ -13,6 +13,7 @@ const nameToWidget = {
 export const LAST_STRING_KEY = "Widget:String";
 export const LAST_THEME_KEY = "Widget:Theme";
 export const TIME_LEFT_KEY = "Widget:Time";
+export const EXTRA_TIME_KEY = "KEYNEEDTIME";
 
 export function getStoredTheme(): string {
   return (sqliteStorage.getItemSync(LAST_THEME_KEY) || "dark") as string;
@@ -82,7 +83,12 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
         const theme = (props.clickActionData?.theme || "dark") as string;
         const lastString = getNewCompliment();
         setNewTime();
-        const timeLeft = Date.now() + 60 * 1000 * 60 * 24;
+
+        const extraTime =
+          Number(sqliteStorage.getItemSync(EXTRA_TIME_KEY)) ||
+          60 * 1000 * 60 * 24;
+
+        const timeLeft = Date.now() + extraTime;
 
         props.renderWidget(
           <StringWidget

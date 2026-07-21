@@ -21,6 +21,7 @@ import {
 } from "@/globals/fileController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import sqliteStorage from "expo-sqlite/kv-store";
+import { SafeAreaView } from "react-native-safe-area-context";
 export const ACTIVE_FILE_KEY = "ACTIVEFILES";
 
 const Customization = () => {
@@ -111,23 +112,43 @@ const Customization = () => {
         <View style={globalStyles.activeSlider}>
           <Switch onChange={toggleSwitch} value={active} />
         </View>
-        <View style={globalStyles.deleteFileTextContainer}>
-          <Pressable
-            onPress={() => {
-              deleteFile(listDir, fileName);
-              loadFiles();
-            }}
-          >
-            <Text
-              style={[
-                globalStyles.deleteText,
-                { color: theme.specialTextColor },
-              ]}
+        {fileName !== "Main.json" ? (
+          <View style={globalStyles.deleteFileTextContainer}>
+            <Pressable
+              onPress={() => {
+                deleteFile(listDir, fileName);
+                loadFiles();
+              }}
             >
-              Delete list
-            </Text>
-          </Pressable>
-        </View>
+              <Text
+                style={[
+                  globalStyles.deleteText,
+                  { color: theme.specialTextColor },
+                ]}
+              >
+                Delete list
+              </Text>
+            </Pressable>
+          </View>
+        ) : (
+          <View style={globalStyles.deleteFileTextContainer}>
+            <Pressable
+              onPress={() => {
+                deleteFile(listDir, fileName);
+                loadFiles();
+              }}
+            >
+              <Text
+                style={[
+                  globalStyles.deleteText,
+                  { color: theme.specialTextColor },
+                ]}
+              >
+                Delete list
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     );
   };
@@ -157,7 +178,7 @@ const Customization = () => {
   );
 
   return (
-    <View
+    <SafeAreaView
       style={[
         globalStyles.container,
         { backgroundColor: theme.backgroundColor },
@@ -165,9 +186,17 @@ const Customization = () => {
     >
       {!viewing ? (
         <>
+          <View style={globalStyles.headerInfoContainer}>
+            <Text style={[globalStyles.text, { color: theme.textColor }]}>
+              Customization page
+            </Text>
+            <Text style={[globalStyles.text, { color: theme.textColor }]}>
+              click on a list to edit it
+            </Text>
+          </View>
           <FlatList
             style={[
-              globalStyles.scroll,
+              globalStyles.listContainer,
               {
                 backgroundColor: theme.deepBackgroundColor,
                 borderColor: theme.outlineColor,
@@ -176,70 +205,77 @@ const Customization = () => {
             data={listFiles}
             renderItem={({ item }) => <FileText fileName={item.name} />}
           />
-          <TextInput
-            style={[globalStyles.text, { color: theme.textColor }]}
-            placeholder="Enter new file name"
-            placeholderTextColor={theme.textColor}
-            value={currentFile}
-            onChangeText={(txt) => {
-              updatecurrentFile(txt);
-              console.log(currentFile);
-            }}
-          />
-          <Pressable
-            onPress={() => {
-              if (currentFile !== "") {
-                createNewFile(
-                  listDir,
-                  currentFile + ".json",
-                  JSON.stringify(["congrats on making a new list"]),
-                );
-                loadFiles();
-                updatecurrentFile("");
-              }
-            }}
-          >
-            <Text
-              style={[globalStyles.text, { color: theme.specialTextColor }]}
+          <View style={globalStyles.mainInsertContainer}>
+            <TextInput
+              style={[globalStyles.text, { color: theme.textColor }]}
+              placeholder="Enter new file name"
+              placeholderTextColor={theme.textColor}
+              value={currentFile}
+              onChangeText={(txt) => {
+                updatecurrentFile(txt);
+                console.log(currentFile);
+              }}
+            />
+            <Pressable
+              onPress={() => {
+                if (currentFile !== "") {
+                  createNewFile(
+                    listDir,
+                    currentFile + ".json",
+                    JSON.stringify(["congrats on making a new list"]),
+                  );
+                  loadFiles();
+                  updatecurrentFile("");
+                }
+              }}
             >
-              Create new list
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              getFile();
-            }}
-          >
-            <Text
-              style={[globalStyles.text, { color: theme.specialTextColor }]}
+              <Text
+                style={[globalStyles.text, { color: theme.specialTextColor }]}
+              >
+                Create new list
+              </Text>
+            </Pressable>
+          </View>
+          <View style={globalStyles.buttonContainer}>
+            <Pressable
+              onPress={() => {
+                getFile();
+              }}
+              style={globalStyles.selectFileButton}
             >
-              upload file
-            </Text>
-          </Pressable>
+              <Text
+                style={[globalStyles.text, { color: theme.specialTextColor }]}
+              >
+                select from files
+              </Text>
+            </Pressable>
+          </View>
         </>
       ) : (
         <>
-          <Text style={[globalStyles.text, { color: theme.textColor }]}>
-            {currentFile}
-          </Text>
-          <Pressable
-            onPress={() => {
-              exitFile(currentFile);
-            }}
-          >
-            <Text
-              style={[
-                globalStyles.deleteText,
-                { color: theme.specialTextColor },
-              ]}
-            >
-              Save compliment table
+          <View style={globalStyles.headerInfoContainer}>
+            <Text style={[globalStyles.text, { color: theme.textColor }]}>
+              {currentFile}
             </Text>
-          </Pressable>
+            <Pressable
+              onPress={() => {
+                exitFile(currentFile);
+              }}
+            >
+              <Text
+                style={[
+                  globalStyles.deleteText,
+                  { color: theme.specialTextColor },
+                ]}
+              >
+                Save compliment table
+              </Text>
+            </Pressable>
+          </View>
 
           <FlatList
             style={[
-              globalStyles.scroll,
+              globalStyles.listContainer,
               {
                 backgroundColor: theme.deepBackgroundColor,
                 borderColor: theme.outlineColor,
@@ -248,43 +284,60 @@ const Customization = () => {
             data={compliments}
             renderItem={({ item }) => <StringText comp={item} />}
           />
-          <TextInput
-            style={[globalStyles.text, { color: theme.textColor }]}
-            placeholder="Enter compliment"
-            placeholderTextColor={theme.textColor}
-            onChangeText={updateCompliment}
-            value={compliment}
-          />
-          <Pressable
-            onPress={() => {
-              if (compliment !== "") {
-                updateComplimentList([...compliments, compliment]);
-              }
-              updateCompliment("");
-            }}
-          >
-            <Text
-              style={[globalStyles.text, { color: theme.specialTextColor }]}
+          <View style={globalStyles.mainInsertContainer}>
+            <TextInput
+              style={[globalStyles.text, { color: theme.textColor }]}
+              placeholder="Enter compliment"
+              placeholderTextColor={theme.textColor}
+              onChangeText={updateCompliment}
+              value={compliment}
+            />
+            <Pressable
+              onPress={() => {
+                if (compliment !== "") {
+                  updateComplimentList([...compliments, compliment]);
+                }
+                updateCompliment("");
+              }}
             >
-              add compliment
-            </Text>
-          </Pressable>
+              <Text
+                style={[globalStyles.text, { color: theme.specialTextColor }]}
+              >
+                add compliment
+              </Text>
+            </Pressable>
+          </View>
 
-          <Pressable
-            onPress={() => {
-              console.log(currentFile);
-              saveFileToDevice(listDir, currentFile);
-            }}
-          >
-            <Text
-              style={[globalStyles.text, { color: theme.specialTextColor }]}
+          <View style={globalStyles.buttonContainer}>
+            <Pressable
+              onPress={() => {
+                console.log(currentFile);
+                saveFileToDevice(listDir, currentFile);
+              }}
+              style={globalStyles.shareFileButton}
             >
-              download file
-            </Text>
-          </Pressable>
+              <Text
+                style={[globalStyles.text, { color: theme.specialTextColor }]}
+              >
+                share file
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                console.log("clicked");
+              }}
+              style={globalStyles.massInsertButton}
+            >
+              <Text
+                style={[globalStyles.text, { color: theme.specialTextColor }]}
+              >
+                WIP
+              </Text>
+            </Pressable>
+          </View>
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
