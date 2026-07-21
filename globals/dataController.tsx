@@ -7,6 +7,7 @@ export const LAST_THEME_KEY = "Widget:Theme";
 export const TIME_LEFT_KEY = "Widget:Time";
 export const ACTIVE_FILE_KEY = "ACTIVEFILES";
 export const EXTRA_TIME_KEY = "KEYNEEDTIME";
+export const CLICK_TO_SKIP_KEY = "Widget:Skip";
 
 export const getNewCompliment = () => {
   const chosenFiles = sqliteStorage.getItemSync(ACTIVE_FILE_KEY);
@@ -150,4 +151,20 @@ export const getTimeUnits = () => {
     m: minuteString.substring(minuteString.length - 2, minuteString.length),
     s: secondsString.substring(secondsString.length - 2, secondsString.length),
   };
+};
+
+export const setSkipOnClick = (val: boolean) => {
+  if (val) {
+    sqliteStorage.setItemSync(CLICK_TO_SKIP_KEY, "1");
+  } else {
+    sqliteStorage.setItemSync(CLICK_TO_SKIP_KEY, "0");
+  }
+};
+
+export const getSkipOnClick = () => {
+  if (sqliteStorage.getItemSync(CLICK_TO_SKIP_KEY) === "1") {
+    return true;
+  } else {
+    return false;
+  }
 };

@@ -2,8 +2,13 @@ import React from "react";
 import type { WidgetTaskHandlerProps } from "react-native-android-widget";
 import { HelloWidget, StringWidget } from "./androidWidget";
 
-import { getNewCompliment, setNewTime } from "@/globals/dataController";
+import {
+  getNewCompliment,
+  getSkipOnClick,
+  setNewTime,
+} from "@/globals/dataController";
 import sqliteStorage from "expo-sqlite/kv-store";
+import { Linking } from "react-native";
 
 const nameToWidget = {
   Hello: HelloWidget,
@@ -80,23 +85,27 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
 
     case "WIDGET_CLICK":
       if (props.clickAction === "MY_ACTION") {
-        const theme = (props.clickActionData?.theme || "dark") as string;
-        const lastString = getNewCompliment();
-        setNewTime();
+        if (getSkipOnClick()) {
+          const theme = (props.clickActionData?.theme || "dark") as string;
+          const lastString = getNewCompliment();
+          setNewTime();
 
-        const extraTime =
-          Number(sqliteStorage.getItemSync(EXTRA_TIME_KEY)) ||
-          60 * 1000 * 60 * 24;
+          const extraTime =
+            Number(sqliteStorage.getItemSync(EXTRA_TIME_KEY)) ||
+            60 * 1000 * 60 * 24;
 
-        const timeLeft = Date.now() + extraTime;
+          const timeLeft = Date.now() + extraTime;
 
-        props.renderWidget(
-          <StringWidget
-            theme={theme}
-            timeLeft={timeLeft}
-            currentString={lastString}
-          />,
-        );
+          props.renderWidget(
+            <StringWidget
+              theme={theme}
+              timeLeft={timeLeft}
+              currentString={lastString}
+            />,
+          );
+        } else {
+          Linking.openURL("complimentwidget://home");
+        }
       }
       break;
 

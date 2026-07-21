@@ -3,12 +3,15 @@ import { Pressable, Text, View } from "react-native";
 
 import {
   getNewCompliment,
+  getSkipOnClick,
   getTimeUnits,
   setNewTime,
+  setSkipOnClick,
   setTimeValue,
   timeToString,
 } from "@/globals/dataController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Checkbox } from "expo-checkbox";
 import { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -23,6 +26,8 @@ export default function Index() {
   const [setHours, updateSetHours] = useState(h);
   const [setMinutes, updateSetMinutes] = useState(m);
   const [setSeconds, updateSetSeconds] = useState(s);
+
+  const [checked, setChecked] = useState(getSkipOnClick());
 
   const { theme } = useContext(SelectedTheme);
 
@@ -140,7 +145,8 @@ export default function Index() {
     >
       <View style={globalStyles.mainIndexContainer}>
         <Text style={[globalStyles.title, { color: theme.textColor }]}>
-          Main page
+          Thank you for trying compliment widget, change anything you would like
+          to and enjoy!
         </Text>
         <View
           style={[
@@ -292,6 +298,16 @@ export default function Index() {
         >
           <Text>set new compliment delay</Text>
         </Pressable>
+        <View>
+          <Checkbox
+            value={checked}
+            onValueChange={(newVal) => {
+              setChecked(newVal);
+              setSkipOnClick(newVal);
+            }}
+          />
+          <Text>Click on widget to skip timer</Text>
+        </View>
       </View>
     </SafeAreaView>
   );

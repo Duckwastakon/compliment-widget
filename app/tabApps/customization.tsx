@@ -268,7 +268,7 @@ const Customization = () => {
                   { color: theme.specialTextColor },
                 ]}
               >
-                Save compliment table
+                Save and exit
               </Text>
             </Pressable>
           </View>
