@@ -15,6 +15,7 @@ export const allThemeDesigns: Record<string, Record<string, string>> = {
     buttonSecondaryClickedColor: "#07C5FB",
     buttonSecondaryDisabledColor: "#B8EFFF",
     accentColor: "#3799FF",
+    deleteColor: "#f24b4b",
   },
   dark: {
     backgroundColor: "#232323",
@@ -93,7 +94,7 @@ export const indexStyles = StyleSheet.create({
     marginBottom: 4,
     width: "100%",
     minHeight: "10%",
-    maxHeight: "40%",
+    maxHeight: "30%",
     borderRadius: 16,
     justifyContent: "center",
   },
@@ -135,7 +136,7 @@ export const indexStyles = StyleSheet.create({
 
   settingText: {
     fontSize: textSizes.subText,
-    fontWeight: "500",
+    fontWeight: "700",
     marginBottom: 4,
   },
 
@@ -205,8 +206,146 @@ export const indexStyles = StyleSheet.create({
   },
 
   checkBoxText: {
+    fontSize: textSizes.subText,
+  },
+});
+
+export const listStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  headerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+    marginBottom: 12,
+  },
+
+  headerText: {
+    fontSize: textSizes.subHeader,
+    fontWeight: "700",
+  },
+
+  headerInfo: {
+    fontSize: textSizes.subText,
+    fontWeight: "400",
+  },
+
+  listContainer: {
+    height: "50%",
+    maxHeight: "50%",
+    width: "90%",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderWidth: 2,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+
+  enterText: {
+    fontSize: textSizes.text,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginBottom: 8,
+  },
+
+  createButton: {
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginBottom: 24,
+  },
+
+  createButtonText: {
+    fontSize: textSizes.subText,
+    fontWeight: "bold",
+  },
+
+  selectFileButton: {
+    borderRadius: 8,
+    width: "70%",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  selectFileText: {
     fontSize: textSizes.text,
     fontWeight: "bold",
+  },
+
+  saveButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  saveText: {
+    fontSize: textSizes.text,
+    fontWeight: "bold",
+  },
+
+  buttonContainer: {
+    gap: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+
+  smallButton: {
+    width: "40%",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  inLineText: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    gap: 12,
+  },
+
+  fileNameContainer: {
+    flex: 7,
+    justifyContent: "center",
+    textAlign: "left",
+  },
+
+  fileText: {
+    fontWeight: "bold",
+    fontSize: textSizes.subHeader,
+    flexWrap: "wrap",
+  },
+
+  checkBoxContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  deleteContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  complimentText: {
+    fontWeight: "500",
+    fontSize: textSizes.text,
+    flexWrap: "wrap",
   },
 });
 
@@ -420,13 +559,6 @@ export const globalStyles = StyleSheet.create({
   updateButton: {
     padding: 12,
     borderRadius: 12,
-  },
-
-  compliment_fileText: {
-    fontWeight: "bold",
-    fontSize: 20,
-    flexWrap: "wrap",
-    textAlign: "left",
   },
 });
 

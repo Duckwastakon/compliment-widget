@@ -3,13 +3,13 @@ import { useContext, useEffect, useState } from "react";
 import {
   FlatList,
   Pressable,
-  Switch,
   Text,
   TextInput,
+  TouchableHighlight,
   View,
 } from "react-native";
 
-import { globalStyles, SelectedTheme } from "@/globals/Global";
+import { listStyles, SelectedTheme } from "@/globals/Global";
 import {
   createNewFile,
   deleteFile,
@@ -20,6 +20,8 @@ import {
   saveFileToDevice,
 } from "@/globals/fileController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Checkbox } from "expo-checkbox";
+import { Image } from "expo-image";
 import sqliteStorage from "expo-sqlite/kv-store";
 import { SafeAreaView } from "react-native-safe-area-context";
 export const ACTIVE_FILE_KEY = "ACTIVEFILES";
@@ -65,8 +67,8 @@ const Customization = () => {
   const FileText = ({ fileName }: fileMusts) => {
     const [active, changeValue] = useState(false);
 
-    const toggleSwitch = async () => {
-      changeValue((previousState) => !previousState);
+    const toggleCheckBox = async () => {
+      changeValue(true);
 
       let currentList = await AsyncStorage.getItem("activeFiles");
       let newList: string[] = [];
@@ -97,62 +99,50 @@ const Customization = () => {
     }, []);
 
     return (
-      <View style={globalStyles.inLineText}>
-        <View style={globalStyles.fileNameContainer}>
+      <View
+        style={[
+          listStyles.inLineText,
+          { backgroundColor: theme.secondaryColor },
+        ]}
+      >
+        <View style={listStyles.fileNameContainer}>
           <Pressable
             onPress={() => {
               openFile(fileName);
             }}
           >
-            <Text
-              style={[
-                globalStyles.compliment_fileText,
-                { color: theme.textColor },
-              ]}
-            >
-              {fileName}
+            <Text style={[listStyles.fileText, { color: theme.textColor }]}>
+              {fileName.split(".")[0]}
             </Text>
           </Pressable>
         </View>
-        <View style={globalStyles.activeSlider}>
-          <Switch onChange={toggleSwitch} value={active} />
+        <View style={listStyles.checkBoxContainer}>
+          <Checkbox
+            onChange={() => {
+              console.log("hey");
+              toggleCheckBox();
+            }}
+            value={active}
+            color={active ? theme.buttonSecondaryColor : undefined}
+          />
         </View>
         {fileName !== "Main.json" ? (
-          <View style={globalStyles.deleteFileTextContainer}>
-            <Pressable
+          <View style={listStyles.deleteContainer}>
+            <TouchableHighlight
               onPress={() => {
                 deleteFile(listDir, fileName);
                 loadFiles();
               }}
+              activeOpacity={0.15}
             >
-              <Text
-                style={[
-                  globalStyles.deleteText,
-                  { color: theme.specialTextColor },
-                ]}
-              >
-                Delete list
-              </Text>
-            </Pressable>
+              <Image
+                style={{ width: 32, height: 32, tintColor: theme.deleteColor }}
+                source={require("./garbage.png")}
+              />
+            </TouchableHighlight>
           </View>
         ) : (
-          <View style={globalStyles.deleteFileTextContainer}>
-            <Pressable
-              onPress={() => {
-                deleteFile(listDir, fileName);
-                loadFiles();
-              }}
-            >
-              <Text
-                style={[
-                  globalStyles.deleteText,
-                  { color: theme.specialTextColor },
-                ]}
-              >
-                cant
-              </Text>
-            </Pressable>
-          </View>
+          <></>
         )}
       </View>
     );
@@ -160,189 +150,225 @@ const Customization = () => {
 
   type stringMusts = { comp: string };
   const StringText = ({ comp }: stringMusts) => (
-    <View style={globalStyles.inLineText}>
-      <View style={globalStyles.fileNameContainer}>
-        <Text
-          style={[globalStyles.compliment_fileText, { color: theme.textColor }]}
-        >
+    <View
+      style={[listStyles.inLineText, { backgroundColor: theme.secondaryColor }]}
+    >
+      <View style={listStyles.fileNameContainer}>
+        <Text style={[listStyles.complimentText, { color: theme.textColor }]}>
           {comp}
         </Text>
       </View>
-      <View style={globalStyles.deleteFileTextContainer}>
-        <Pressable
+      <View style={listStyles.deleteContainer}>
+        <TouchableHighlight
           onPress={() => {
             updateComplimentList(compliments.filter((c) => c !== comp));
           }}
+          activeOpacity={0.15}
         >
-          <Text
-            style={[globalStyles.deleteText, { color: theme.specialTextColor }]}
-          >
-            Delete
-          </Text>
-        </Pressable>
+          <Image
+            style={{ width: 32, height: 32, tintColor: theme.deleteColor }}
+            source={require("./garbage.png")}
+          />
+        </TouchableHighlight>
       </View>
     </View>
   );
 
   return (
     <SafeAreaView
-      style={[
-        globalStyles.container,
-        { backgroundColor: theme.backgroundColor },
-      ]}
+      style={[listStyles.container, { backgroundColor: theme.primaryColor }]}
     >
       {!viewing ? (
         <>
-          <View style={globalStyles.headerInfoContainer}>
-            <Text style={[globalStyles.text, { color: theme.textColor }]}>
-              Customization page
+          <View style={listStyles.headerContainer}>
+            <Text style={[listStyles.headerText, { color: theme.textColor }]}>
+              Compliment lists
             </Text>
-            <Text style={[globalStyles.text, { color: theme.textColor }]}>
-              click a edit a list
+            <Text style={[listStyles.headerInfo, { color: theme.accentColor }]}>
+              choose a compliment list to edit
             </Text>
           </View>
           <FlatList
             style={[
-              globalStyles.listContainer,
+              listStyles.listContainer,
               {
-                backgroundColor: theme.deepBackgroundColor,
-                borderColor: theme.outlineColor,
+                //backgroundColor: theme.secondaryColor,
+                borderColor: theme.accentColor,
               },
             ]}
             contentContainerStyle={{ gap: 8 }}
             data={listFiles}
             renderItem={({ item }) => <FileText fileName={item.name} />}
           />
-          <View style={globalStyles.mainInsertContainer}>
-            <TextInput
-              style={[globalStyles.text, { color: theme.textColor }]}
-              placeholder="Enter new file name"
-              placeholderTextColor={theme.textColor}
-              value={currentFile}
-              onChangeText={(txt) => {
-                updatecurrentFile(txt);
-                console.log(currentFile);
-              }}
-            />
-            <Pressable
-              onPress={() => {
-                if (currentFile !== "") {
-                  createNewFile(
-                    listDir,
-                    currentFile + ".json",
-                    JSON.stringify(["congrats on making a new list"]),
-                  );
-                  loadFiles();
-                  updatecurrentFile("");
-                }
-              }}
+          <TextInput
+            style={[
+              listStyles.enterText,
+              { color: theme.textColor, backgroundColor: theme.secondaryColor },
+            ]}
+            placeholder="Enter new list name"
+            placeholderTextColor={theme.textColor}
+            value={currentFile}
+            onChangeText={(txt) => {
+              updatecurrentFile(txt);
+              console.log(currentFile);
+            }}
+          />
+          <TouchableHighlight
+            style={[
+              listStyles.createButton,
+              { backgroundColor: theme.buttonMainColor },
+            ]}
+            activeOpacity={0.6}
+            underlayColor={theme.buttonMainClickedColor}
+            onPress={() => {
+              if (currentFile !== "") {
+                createNewFile(
+                  listDir,
+                  currentFile + ".json",
+                  JSON.stringify(["congrats on making a new list"]),
+                );
+                loadFiles();
+                updatecurrentFile("");
+              }
+            }}
+          >
+            <Text
+              style={[
+                listStyles.createButtonText,
+                { color: theme.buttonTextColor },
+              ]}
             >
-              <Text
-                style={[globalStyles.text, { color: theme.specialTextColor }]}
-              >
-                Create new list
-              </Text>
-            </Pressable>
-          </View>
-          <View style={globalStyles.buttonContainer}>
-            <Pressable
-              onPress={() => {
-                getFile();
-              }}
-              style={globalStyles.selectFileButton}
+              Create new list
+            </Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => {
+              getFile();
+            }}
+            style={[
+              listStyles.selectFileButton,
+              { backgroundColor: theme.buttonSecondaryColor },
+            ]}
+            activeOpacity={0.6}
+            underlayColor={theme.buttonSecondaryClickedColor}
+          >
+            <Text
+              style={[listStyles.selectFileText, { color: theme.textColor }]}
             >
-              <Text
-                style={[globalStyles.text, { color: theme.specialTextColor }]}
-              >
-                select from files
-              </Text>
-            </Pressable>
-          </View>
+              Upload a list from files
+            </Text>
+          </TouchableHighlight>
         </>
       ) : (
         <>
-          <View style={globalStyles.headerInfoContainer}>
-            <Text style={[globalStyles.text, { color: theme.textColor }]}>
-              {currentFile}
+          <View style={listStyles.headerContainer}>
+            <Text style={[listStyles.headerText, { color: theme.textColor }]}>
+              {currentFile.split(".")[0]}
             </Text>
-            <Pressable
+            <TouchableHighlight
+              style={[
+                listStyles.saveButton,
+                { backgroundColor: theme.buttonSecondaryColor },
+              ]}
               onPress={() => {
                 exitFile(currentFile);
               }}
+              activeOpacity={0.6}
+              underlayColor={theme.buttonSecondaryClickedColor}
             >
               <Text
-                style={[
-                  globalStyles.deleteText,
-                  { color: theme.specialTextColor },
-                ]}
+                style={[listStyles.saveText, { color: theme.buttonTextColor }]}
               >
-                Save and exit
+                Save and exit list
               </Text>
-            </Pressable>
+            </TouchableHighlight>
           </View>
 
           <FlatList
             style={[
-              globalStyles.listContainer,
+              listStyles.listContainer,
               {
-                backgroundColor: theme.deepBackgroundColor,
-                borderColor: theme.outlineColor,
+                //backgroundColor: theme.deepBackgroundColor,
+                borderColor: theme.accentColor,
               },
             ]}
             contentContainerStyle={{ gap: 8 }}
             data={compliments}
             renderItem={({ item }) => <StringText comp={item} />}
           />
-          <View style={globalStyles.mainInsertContainer}>
-            <TextInput
-              style={[globalStyles.text, { color: theme.textColor }]}
-              placeholder="Enter compliment"
-              placeholderTextColor={theme.textColor}
-              onChangeText={updateCompliment}
-              value={compliment}
-            />
-            <Pressable
-              onPress={() => {
-                if (compliment !== "") {
-                  updateComplimentList([...compliments, compliment]);
-                }
-                updateCompliment("");
-              }}
+          <TextInput
+            style={[
+              listStyles.enterText,
+              { color: theme.textColor, backgroundColor: theme.secondaryColor },
+            ]}
+            placeholder="Type a new compliment"
+            placeholderTextColor={theme.textColor}
+            onChangeText={updateCompliment}
+            value={compliment}
+          />
+          <TouchableHighlight
+            onPress={() => {
+              if (compliment !== "") {
+                updateComplimentList([...compliments, compliment]);
+              }
+              updateCompliment("");
+            }}
+            style={[
+              listStyles.createButton,
+              { backgroundColor: theme.buttonMainColor },
+            ]}
+            activeOpacity={0.6}
+            underlayColor={theme.buttonMainClickedColor}
+          >
+            <Text
+              style={[
+                listStyles.createButtonText,
+                { color: theme.buttonTextColor },
+              ]}
             >
-              <Text
-                style={[globalStyles.text, { color: theme.specialTextColor }]}
-              >
-                add compliment
-              </Text>
-            </Pressable>
-          </View>
+              Add new compliment
+            </Text>
+          </TouchableHighlight>
 
-          <View style={globalStyles.buttonContainer}>
-            <Pressable
+          <View style={listStyles.buttonContainer}>
+            <TouchableHighlight
               onPress={() => {
                 console.log(currentFile);
                 saveFileToDevice(listDir, currentFile);
               }}
-              style={globalStyles.shareFileButton}
+              style={[
+                listStyles.smallButton,
+                { backgroundColor: theme.buttonSecondaryColor },
+              ]}
+              activeOpacity={0.6}
+              underlayColor={theme.buttonSecondaryClickedColor}
             >
               <Text
-                style={[globalStyles.text, { color: theme.specialTextColor }]}
+                style={[listStyles.selectFileText, { color: theme.textColor }]}
               >
-                share file
+                Share selected list
               </Text>
-            </Pressable>
-            <Pressable
+            </TouchableHighlight>
+            <TouchableHighlight
               onPress={() => {
                 console.log("clicked");
               }}
-              style={globalStyles.massInsertButton}
+              style={[
+                listStyles.smallButton,
+                { backgroundColor: theme.buttonSecondaryColor },
+              ]}
+              activeOpacity={0.6}
+              underlayColor={theme.buttonSecondaryClickedColor}
             >
               <Text
-                style={[globalStyles.text, { color: theme.specialTextColor }]}
+                style={[
+                  listStyles.selectFileText,
+                  { color: theme.specialTextColor },
+                ]}
               >
                 Paste compliments
               </Text>
-            </Pressable>
+            </TouchableHighlight>
           </View>
         </>
       )}

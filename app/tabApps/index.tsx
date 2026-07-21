@@ -394,7 +394,7 @@ export default function Index() {
               }}
             />
             <Text
-              style={[indexStyles.checkBoxText, { color: theme.accentColor }]}
+              style={[indexStyles.checkBoxText, { color: theme.textColor }]}
             >
               Click on widget to skip timer
             </Text>
