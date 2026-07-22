@@ -46,21 +46,10 @@
         {
           "widgets": [
             {
-              "name": "Hello",
-              "label": "My Hello Widget",
-              "minWidth": "320dp",
-              "minHeight": "120dp",
-              "targetCellWidth": 5,
-              "targetCellHeight": 2,
-              "description": "This is my first widget",
-              "previewImage": "./assets/images/icon.png",
-              "updatePeriodMillis": 1800000
-            },
-            {
               "name": "dispWidget",
               "label": "disp",
               "minWidth": "160dp",
-              "minHeight": "120dp",
+              "minHeight": "80dp",
               "targetCellWidth": 5,
               "targetCellHeight": 2,
               "description": "Yoooo",
@@ -83,10 +72,7 @@
               "name": "MyWidget",
               "displayName": "My Widget",
               "description": "A sample home screen widget",
-              "supportedFamilies": [
-                "systemMedium",
-                "systemLarge"
-              ]
+              "supportedFamilies": ["systemMedium", "systemLarge"]
             }
           ]
         }

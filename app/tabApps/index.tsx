@@ -8,7 +8,7 @@ import {
   setNewTime,
   setSkipOnClick,
   setTimeValue,
-  timeToString,
+  timeToString
 } from "@/globals/dataController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Checkbox } from "expo-checkbox";

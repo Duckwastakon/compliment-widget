@@ -1,6 +1,6 @@
 import React from "react";
 import type { WidgetTaskHandlerProps } from "react-native-android-widget";
-import { HelloWidget, StringWidget } from "./androidWidget";
+import { StringWidget } from "./androidWidget";
 
 import {
   getNewCompliment,
@@ -11,7 +11,6 @@ import sqliteStorage from "expo-sqlite/kv-store";
 import { Linking } from "react-native";
 
 const nameToWidget = {
-  Hello: HelloWidget,
   dispWidget: StringWidget,
 };
 
@@ -21,7 +20,7 @@ export const TIME_LEFT_KEY = "Widget:Time";
 export const EXTRA_TIME_KEY = "KEYNEEDTIME";
 
 export function getStoredTheme(): string {
-  return (sqliteStorage.getItemSync(LAST_THEME_KEY) || "dark") as string;
+  return (sqliteStorage.getItemSync(LAST_THEME_KEY) || "light") as string;
 }
 
 export function getStoredString(): string {
@@ -76,7 +75,19 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
       break;
 
     case "WIDGET_RESIZED":
-      // Not needed for now
+      if (widgetInfo.widgetName === "dispWidget") {
+        const theme = getStoredTheme();
+        const lastString = getStoredString();
+        const timeLeft = getStoredTime();
+
+        props.renderWidget(
+          <StringWidget
+            theme={theme}
+            timeLeft={timeLeft}
+            currentString={lastString}
+          />,
+        );
+      }
       break;
 
     case "WIDGET_DELETED":

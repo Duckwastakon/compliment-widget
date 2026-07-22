@@ -1,6 +1,8 @@
+import { StringWidget } from "@/widgets/androidWidget";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Directory, File, Paths } from "expo-file-system";
 import sqliteStorage from "expo-sqlite/kv-store";
+import { requestWidgetUpdate } from "react-native-android-widget";
 
 export const LAST_STRING_KEY = "Widget:String";
 export const LAST_THEME_KEY = "Widget:Theme";
@@ -44,6 +46,17 @@ export const getNewCompliment = () => {
   sqliteStorage.setItemSync(TIME_LEFT_KEY, (Date.now() + extraTime).toString());
 
   setAsyncs(newString);
+
+  requestWidgetUpdate({
+    widgetName: "dispWidget",
+    renderWidget: () => (
+      <StringWidget
+        theme={loadCurrentTheme()}
+        timeLeft={Date.now() + extraTime}
+        currentString={newString}
+      />
+    ),
+  });
 
   return newString;
 };
@@ -124,11 +137,8 @@ export const setNewTheme = (newTheme: string) => {
   sqliteStorage.setItemSync(LAST_THEME_KEY, newTheme);
 };
 
-export function getCurrentTheme() {
-  return sqliteStorage.getItemSync(LAST_THEME_KEY);
-}
 export const loadCurrentTheme = () => {
-  return sqliteStorage.getItemSync(LAST_THEME_KEY) || "purple";
+  return sqliteStorage.getItemSync(LAST_THEME_KEY) || "light";
 };
 export const setTimeValue = (value: string) => {
   sqliteStorage.setItemSync(EXTRA_TIME_KEY, value);
