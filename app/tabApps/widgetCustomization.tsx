@@ -1,5 +1,10 @@
 import { setNewTheme } from "@/globals/dataController";
-import { allThemeDesigns, globalStyles, SelectedTheme } from "@/globals/Global";
+import {
+  SelectedTheme,
+  allThemeDesigns,
+  allThemes,
+  themeStyles,
+} from "@/globals/Global";
 import { useContext } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -8,22 +13,13 @@ import { StringWidget } from "@/widgets/androidWidget";
 import sqliteStorage from "expo-sqlite/kv-store";
 import { requestWidgetUpdate } from "react-native-android-widget";
 
-const allThemes: string[] = [
-  "dark",
-  "light",
-  "purple",
-  "rose",
-  "forest",
-  "fire",
-  "oceanic",
-];
-
 export default function WidgetCustomizatiom() {
   const { theme, setTheme } = useContext(SelectedTheme);
   type themeVariables = { styleName: string };
   const ThemeDisplay = ({ styleName }: themeVariables) => {
-    const bgColor = allThemeDesigns[styleName]["backgroundColor"];
+    const bgColor = allThemeDesigns[styleName]["primaryColor"];
     const textColor = allThemeDesigns[styleName]["textColor"];
+    const borderColor = allThemeDesigns[styleName]["accentColor"];
 
     const LAST_STRING_KEY = "Widget:String";
     const TIME_LEFT_KEY = "Widget:Time";
@@ -40,12 +36,13 @@ export default function WidgetCustomizatiom() {
     const timeLeft = getStoredTime();
     return (
       <Pressable
-        style={{
-          width: "100%",
-          minWidth: "100%",
-          alignItems: "center",
-          alignContent: "center",
-        }}
+        style={[
+          themeStyles.themeObject,
+          {
+            backgroundColor: bgColor,
+            borderColor: borderColor,
+          },
+        ]}
         onPress={() => {
           setNewTheme(styleName);
           setTheme(allThemeDesigns[styleName]);
@@ -61,78 +58,56 @@ export default function WidgetCustomizatiom() {
               />
             ),
           });
-
-          // IOS Widget (removed due to not being able to test it)
-          //const props = {
-          //  currentCompliment: "Yo",
-          //  updateTime: Date.now(),
-          // backgroundColor: allThemeDesigns[styleName]["backgroundColor"],
-          //textColor: allThemeDesigns[styleName]["textColor"],
-          //};
-          //MyWidget.updateSnapshot(props);
         }}
       >
-        <View
-          style={{
-            width: "90%",
-            minWidth: "90%",
-            borderRadius: 4,
-            padding: 8,
-            alignItems: "center",
-            alignContent: "center",
-            backgroundColor: bgColor,
-          }}
-        >
-          <Text
-            style={{
-              flex: 1,
-              width: "100%",
-              fontSize: 32,
-              fontWeight: "bold",
+        <Text
+          style={[
+            themeStyles.themeObjectText,
+            {
               color: textColor,
-            }}
-          >
-            {styleName}
-          </Text>
-        </View>
+            },
+          ]}
+        >
+          {styleName}
+        </Text>
       </Pressable>
     );
   };
 
   return (
     <SafeAreaView
-      style={[
-        globalStyles.widgetCustomContainer,
-        { backgroundColor: theme.backgroundColor },
-      ]}
+      style={[themeStyles.container, { backgroundColor: theme.primaryColor }]}
     >
-      <View
-        style={{
-          alignItems: "center",
-          alignContent: "center",
-          height: "10%",
-          width: "100%",
-        }}
-      >
+      <View style={[themeStyles.titleContainer, {}]}>
         <Text
-          style={{
-            fontSize: 20,
-            alignItems: "center",
-            alignContent: "center",
-            color: theme.textColor,
-          }}
+          style={[
+            themeStyles.titleText,
+            {
+              color: theme.textColor,
+            },
+          ]}
         >
-          Choose a widget color scheme
+          Color themes
+        </Text>
+        <Text
+          style={[
+            themeStyles.titleInfo,
+            {
+              color: theme.accentColor,
+            },
+          ]}
+        >
+          Click on a color theme to select it
         </Text>
       </View>
       <FlatList
         style={[
-          globalStyles.widgetFlatList,
+          themeStyles.themeContainer,
           {
-            backgroundColor: theme.deepBackgroundColor,
+            backgroundColor: theme.secondaryColor,
           },
         ]}
-        contentContainerStyle={globalStyles.widgetContOrdering}
+        contentContainerStyle={themeStyles.themeOrdering}
         data={allThemes}
         renderItem={({ item }) => <ThemeDisplay styleName={item} />}
       />

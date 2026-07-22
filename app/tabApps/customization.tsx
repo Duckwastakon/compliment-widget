@@ -67,8 +67,8 @@ const Customization = () => {
   const FileText = ({ fileName }: fileMusts) => {
     const [active, changeValue] = useState(false);
 
-    const toggleCheckBox = async () => {
-      changeValue(true);
+    const toggleCheckBox = async (val: boolean) => {
+      changeValue(val);
 
       let currentList = await AsyncStorage.getItem("activeFiles");
       let newList: string[] = [];
@@ -118,9 +118,9 @@ const Customization = () => {
         </View>
         <View style={listStyles.checkBoxContainer}>
           <Checkbox
-            onChange={() => {
+            onValueChange={(val) => {
               console.log("hey");
-              toggleCheckBox();
+              toggleCheckBox(val);
             }}
             value={active}
             color={active ? theme.buttonSecondaryColor : undefined}
